@@ -1,0 +1,110 @@
+/* ===================================================================
+   Column grid utilities from the Clarity template.
+
+   The font imports and the Charter @font-face block that upstream ships
+   here are dropped: main_free.css already declares Charter, Fira Code is
+   imported there too, and Poppins (upstream's sans) is no longer used by
+   this fork, so the request was a blocking fetch for a font nothing sets.
+   =================================================================== */
+.columns-12 {
+  display: grid;
+  -moz-column-gap: 2vw;
+       column-gap: 2vw;
+  grid-template-columns: repeat(12, 1fr);
+}
+
+.columns-10 {
+  display: grid;
+  -moz-column-gap: 2vw;
+       column-gap: 2vw;
+  grid-template-columns: repeat(10, 1fr);
+}
+
+.columns-8 {
+  display: grid;
+  -moz-column-gap: 2vw;
+       column-gap: 2vw;
+  grid-template-columns: repeat(8, 1fr);
+}
+
+.columns-6 {
+  display: grid;
+  -moz-column-gap: 2vw;
+       column-gap: 2vw;
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.columns-5 {
+  display: grid;
+  -moz-column-gap: 2vw;
+       column-gap: 2vw;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.columns-4 {
+  display: grid;
+  -moz-column-gap: 2vw;
+       column-gap: 2vw;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.columns-3 {
+  display: grid;
+  -moz-column-gap: 2vw;
+       column-gap: 2vw;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.columns-2 {
+  display: grid;
+  -moz-column-gap: 2vw;
+       column-gap: 2vw;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media screen and (max-width: 992px) {
+  .columns-12 {
+    display: grid;
+    -moz-column-gap: 2vw;
+         column-gap: 2vw;
+    grid-template-columns: repeat(6, 1fr);
+  }
+  .columns-10 {
+    display: grid;
+    -moz-column-gap: 2vw;
+         column-gap: 2vw;
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .columns-8 {
+    display: grid;
+    -moz-column-gap: 2vw;
+         column-gap: 2vw;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .columns-6 {
+    display: grid;
+    -moz-column-gap: 2vw;
+         column-gap: 2vw;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .columns-5 {
+    display: grid;
+    -moz-column-gap: 2vw;
+         column-gap: 2vw;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media screen and (max-width: 769px) {
+  .columns-12 {
+    display: grid;
+    -moz-column-gap: 2vw;
+         column-gap: 2vw;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .columns-2 {
+    display: grid;
+    -moz-column-gap: 2vw;
+         column-gap: 2vw;
+    grid-template-columns: repeat(1, 1fr);
+  }
+}

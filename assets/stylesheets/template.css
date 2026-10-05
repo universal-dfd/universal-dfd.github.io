@@ -1,0 +1,278 @@
+/* ===================================================================
+   Project layer.
+
+   main_free.css carries the Clarity typography and page chrome; this file
+   holds the components the project pages built on it keep re-deriving —
+   a palette, figure frames, result tables, stat strips and cards.
+
+   Everything here is namespace-free and safe to delete piecemeal. Put
+   anything genuinely specific to one paper in its own stylesheet rather
+   than growing this one.
+   =================================================================== */
+
+:root {
+  /* ink ramp — body text, secondary text, labels */
+  --ink: #353535;
+  --ink-2: #5f666c;
+  --ink-3: #8a9198;
+
+  /* rules: --rule for borders that should read, --hair for ones that shouldn't */
+  --rule: #e0e3e5;
+  --hair: #eceef0;
+
+  /* one accent hue, reserved for measured quantities; --pos / --neg for
+     signed results. Resist adding more: the palette is the restraint. */
+  --navy: #1c365f;
+  --navy-2: #41648f;
+  --pos: #217d4c;
+  --neg: #b03a2e;
+  --mid: #8a9198;
+
+  /* the hero band color, repeated on every .gray section */
+  --band: #e0e4e6;
+  --card: #ffffff;
+
+  --sans: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --mono: "Inconsolata", "Fira Code", Consolas, Menlo, monospace;
+}
+
+.sans { font-family: var(--sans); }
+
+/* small caps-ish label above a heading */
+.eyebrow {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  line-height: 1.4;
+}
+
+tt, code, kbd, samp {
+  font-family: var(--mono);
+  font-size: 1.05em;
+  /* ligatures turn `!=` and `->` into glyphs that no longer read as the
+     characters the paper is talking about */
+  font-feature-settings: "liga" 0, "calt" 0;
+}
+tt { background: none; padding: 0; }
+
+/* footnote-sized aside under a figure or section */
+.fnote { font-size: 88%; color: #666; }
+
+/* ---------- hero buttons ---------- */
+/* inline <svg> inside .button.icon, sized to match the Font Awesome glyphs */
+.button.icon .btn-icon {
+  height: 1.05em;
+  width: auto;
+  padding-left: 0.5em;
+  padding-bottom: 1px;
+  box-sizing: content-box;
+  flex: none;
+}
+
+/* the frosted pill used for Paper / Code / Models / Data in the hero */
+.button.icon.frosted {
+  background-color: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12),
+              inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+}
+
+/* ---------- hero figure frame ---------- */
+.cover-frame {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12),
+              inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+  padding: 14px;
+}
+.cover-frame img {
+  display: block;
+  width: 100%;
+  margin: 0 0 10px 0;
+  padding: 0;
+}
+.cover-frame img:last-child { margin-bottom: 0; }
+
+/* ---------- figure cards ---------- */
+.figure-card {
+  border: 1.5px solid #dfe6e9;
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 18px;
+  background: var(--card);
+}
+/* main_free.css pads every img inside .container.blog; inside a card the
+   card's own padding is the frame */
+.figure-card img {
+  display: block;
+  width: 100%;
+  padding: 0 !important;
+  margin: 0;
+}
+
+.figure-row {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  margin: 0 auto;
+}
+.figure-row .figure-cell { flex: 1 1 0; min-width: 0; }
+.figure-row .figure-cell .figure-card { margin: 0; }
+.figure-row .subcaption {
+  margin: 12px 0 0 0;
+  padding: 0;
+  text-align: center;
+  font-weight: 600;
+  font-size: 80%;
+  line-height: 1.3;
+  color: #2d3436;
+}
+
+/* ---------- result tables ---------- */
+.table-wrap {
+  overflow-x: auto;
+  background: var(--card);
+  border: 1.5px solid #dfe6e9;
+  border-radius: 10px;
+  padding: 16px 18px;
+}
+
+table.data {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--sans);
+  font-size: 14.5px;
+  background: var(--card);
+}
+table.data th {
+  text-align: left;
+  font-weight: 700;
+  color: var(--ink);
+  padding: 0.55em 0.7em;
+  border-bottom: 1.5px solid var(--ink);
+  white-space: nowrap;
+}
+table.data td {
+  padding: 0.45em 0.7em;
+  border-bottom: 1px solid var(--hair);
+  color: var(--ink-2);
+}
+table.data tbody tr:last-child td { border-bottom: none; }
+/* main_free.css stripes every other body row; a table that carries its own
+   emphasis reads better flat */
+table.data tbody tr,
+table.data tbody tr:nth-child(2n+1) { background: transparent; }
+
+table.data td.num,
+table.data th.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+/* the row for this paper's own method */
+table.data tr.ours td {
+  color: var(--ink);
+  font-weight: 700;
+  background: #f6f8fa;
+}
+/* a full-width label splitting the body into blocks */
+table.data tr.group td {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding-top: 1.1em;
+  border-bottom: 1px solid var(--rule);
+}
+table.data .ci {
+  font-size: 11.5px;
+  color: var(--ink-3);
+  padding-left: 0.35em;
+}
+
+/* ---------- number strip ---------- */
+.stat-row { display: flex; gap: 20px; flex-wrap: wrap; margin: 0; }
+.stat {
+  flex: 1 1 180px;
+  background: var(--card);
+  border: 1.5px solid #dfe6e9;
+  border-radius: 10px;
+  padding: 16px 18px;
+  text-align: center;
+}
+.stat .n {
+  font-family: var(--sans);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.stat .l {
+  font-family: var(--sans);
+  font-size: 12.5px;
+  color: var(--ink-2);
+  margin-top: 6px;
+  line-height: 1.35;
+}
+
+/* ---------- card grid ---------- */
+.card-grid { display: flex; gap: 20px; flex-wrap: wrap; }
+.card {
+  flex: 1 1 300px;
+  min-width: 0;
+  background: var(--card);
+  border: 1.5px solid #dfe6e9;
+  border-radius: 10px;
+  padding: 16px 18px;
+}
+.card .card-head {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--rule);
+}
+.card .card-body {
+  font-family: "Charter", Georgia, serif;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+.card .card-body b { color: var(--ink); }
+
+/* ---------- key/value list ---------- */
+.kv {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px 18px;
+  font-family: var(--sans);
+  font-size: 14px;
+  align-items: baseline;
+}
+.kv dt { color: var(--ink-3); font-weight: 600; }
+.kv dd { margin: 0; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ---------- footer ---------- */
+footer .container p { text-align: center; }
+
+/* ---------- responsive ---------- */
+@media screen and (max-width: 768px) {
+  .figure-row { flex-direction: column; gap: 20px; }
+  .figure-card { max-width: 100% !important; padding: 12px; }
+  .container.blog p.caption { max-width: 100% !important; }
+  .card-grid { flex-direction: column; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

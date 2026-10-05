@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Universal Representations for Robust AI-Generated Video Detection</title>
+    <meta name="description" content="SEAM unifies artifact, physical-plausibility and deep-embedding cues to detect AI-generated video across unseen generators; SLOP is a dataset of 6,000 real and AI-generated videos from Instagram, TikTok and X.">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <meta name="robots" content="all">
+    <meta content="en_EN" property="og:locale">
+    <meta content="website" property="og:type">
+    <meta content="https://universal-dfd.github.io" property="og:url">
+    <meta content="Universal Representations for Robust AI-Generated Video Detection" property="og:title">
+    <meta content="SEAM unifies artifact, physical-plausibility and deep-embedding cues to detect AI-generated video across unseen generators; SLOP is a dataset of 6,000 real and AI-generated videos from Instagram, TikTok and X." property="og:description">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="Universal Representations for Robust AI-Generated Video Detection">
+
+    <link rel="stylesheet" type="text/css" media="all" href="assets/stylesheets/main_free.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="clarity/clarity.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="assets/stylesheets/template.css" />
+    <link href="assets/fontawesome-free-7.1.0-web/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <script src="assets/scripts/navbar.js"></script>
+    <script src="assets/scripts/main.js" defer></script>
+</head>
+
+<body onload="if (document.activeElement) document.activeElement.blur();">
+<script>window.addEventListener('load', () => { window.scrollTo(0, 0); });</script>
+
+<!-- ============================ HERO ============================ -->
+<div class="container blog" id="first-content" style="background-color: #E0E4E6;">
+  <div class="blog-title">
+    <div class="blog-intro">
+      <div>
+        <h1 class="title" style="font-weight:700;"><b style="font-weight:700; -webkit-text-stroke:1.1px currentColor; paint-order:stroke fill;">Universal Representations for Robust AI-Generated Video Detection</b></h1>
+
+        <p class="author">
+          <a href="#">Rhea Susarla</a><sup>1</sup> and
+          <a href="#">Maty Bohacek</a><sup>2</sup>
+        </p>
+        <p class="author" style="padding-top:0px;">
+          <sup>1</sup> Fremont Union High School District &nbsp;&nbsp; <sup>2</sup> Stanford University
+        </p>
+
+        <p class="abstract">
+          Methods for detecting AI-generated video fall into three long-standing categories: low-level analysis of generation artifacts, high-level tests of physical plausibility, and learned classifiers over deep embeddings. Detectors in each category generalize poorly beyond their training distribution, and, we argue, published comparisons between them are confounded by backbone size discrepancies. We present, to our knowledge, the first architecture that explicitly unifies all three categories of cues&mdash;density-based anomaly scores over frozen encoder features, fused with spectral and motion-coherence streams&mdash;and name it <b>SEAM</b>. Trained on a single generator from AIGVDBench, SEAM reaches 0.92 AUC on 19 unseen open-source generators, beating the state-of-the-art (SOTA) performance, and matching SOTA performance (0.87 AUC) on 11 unseen commercial generators, including Sora, Kling, and Pika. We further introduce <b>SLOP</b>, a dataset of 6,000 real and AI-generated videos from Instagram, TikTok, and X, and a taxonomy of such content. SEAM achieves the best in-domain performance on SLOP (0.96 AUC), and a SEAM trained on SLOP transfers to unseen commercial generators better than any baseline trained on the same data (0.89 AUC).
+        </p>
+
+        <div class="info" style="margin-top:1.2em;">
+          <div>
+            <a href="#" class="button icon frosted">Paper <i class="fa-solid fa-book-open"></i></a> &nbsp;&nbsp;
+            <a href="#" class="button icon frosted">Code <i class="fa-solid fa-code"></i></a> &nbsp;&nbsp;
+            <a href="#" class="button icon frosted">Models <i class="fa-solid fa-hexagon-nodes"></i></a> &nbsp;&nbsp;
+            <a href="#" class="button icon frosted">Data <i class="fa-solid fa-database"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="blog-cover" style="width:100% !important; overflow:hidden; align-items:center;">
+      <!-- Placeholder for the teaser figure. -->
+      <div class="cover-frame">
+        <div style="aspect-ratio:16 / 7;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================ CONTENT ============================ -->
+<div class="container blog main first" id="blog-main">
+</div>
+
+<!-- ============================ CITATION ============================ -->
+<div class="container blog main">
+  <h2>Citation</h2>
+  <br>
+<pre><code class="plaintext">@article{susarla2026universal,
+    title        = {Universal Representations for Robust AI-Generated Video Detection},
+    author       = {Susarla, Rhea and Bohacek, Maty},
+    year         = {2026}
+  }</code></pre>
+</div>
+
+<div class="container blog main">
+  <h2>Acknowledgments</h2>
+  <p class="text fnote">
+  </p>
+</div>
+
+<br>
+
+<footer>
+  <div class="container">
+    <p style="font-size:small;">
+      Last updated October 2026. This website is built on the modified <a href="https://shikun.io/projects/clarity" style="font-size:small;">Clarity Template</a>.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
