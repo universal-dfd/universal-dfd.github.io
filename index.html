@@ -20,7 +20,7 @@
     <link rel="stylesheet" type="text/css" media="all" href="assets/stylesheets/main_free.css" />
     <link rel="stylesheet" type="text/css" media="all" href="clarity/clarity.css" />
     <link rel="stylesheet" type="text/css" media="all" href="assets/stylesheets/template.css" />
-    <link rel="stylesheet" type="text/css" media="all" href="assets/stylesheets/seam.css?v=1791737811" />
+    <link rel="stylesheet" type="text/css" media="all" href="assets/stylesheets/seam.css?v=1791744352" />
     <link href="assets/fontawesome-free-7.1.0-web/css/all.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,8 +28,8 @@
 
     <script src="assets/scripts/navbar.js"></script>
     <script src="assets/scripts/main.js" defer></script>
-    <script src="assets/scripts/seam.js?v=1791737811" defer></script>
-    <script src="assets/scripts/teaser.js?v=1791737811" defer></script>
+    <script src="assets/scripts/seam.js?v=1791744352" defer></script>
+    <script src="assets/scripts/teaser.js?v=1791744352" defer></script>
 </head>
 
 <body onload="if (document.activeElement) document.activeElement.blur();">
@@ -68,9 +68,9 @@
     <div class="blog-cover" style="width:100% !important; overflow:hidden; align-items:center;">
       <!-- Placeholder for the teaser figure. -->
       <div class="cover-frame">
-        <p class="eyebrow se-eyebrow">Explore the four streams</p>
+        <p class="eyebrow se-eyebrow">See the four streams on an example video</p>
         <div id="stream-explorer" class="stream-explorer"><noscript>Enable JavaScript to explore the four streams on an example clip.</noscript></div>
-        <p class="se-foot">Outputs of the released model on an AI-generated clip from AIGVDBench (Luma). Heatmaps show where each stream measures deviation from real footage; the final score pools them across the whole clip.</p>
+        <p class="se-foot">Outputs of the released model on one AI-generated clip (Luma) and one real clip, both from AIGVDBench. Heatmaps show where each stream measures deviation from real footage, and real footage has unusual patches too; the final score pools them across the whole clip.</p>
       </div>
     </div>
   </div>
@@ -91,31 +91,32 @@
 
 
 
+
+
+
+
+
+
+
+
 <!-- ============================ OVERVIEW ============================ -->
 <div class="container blog main first" id="blog-main">
   <fieldset class="summary-card">
     <legend class="summary-title">Key Takeaways</legend>
     <ul>
-      <li><b>SEAM learns only what real video looks like.</b> A clip is flagged for how far it falls from reality, not for resembling a particular generator.</li>
-      <li><b>One training generator, thirty unseen ones.</b> Trained on a single generator, SEAM reaches 0.92 AUC on 19 unseen open-source generators and 0.87 on 11 unseen commercial ones.</li>
-      <li><b>SLOP covers the videos people actually post.</b> We collect them from Instagram, TikTok and X and sort them by style, format and content.</li>
-      <li><b>Production style appears to fool the model.</b> Heavy effects and polish seem to trip it up more than the content does.</li>
+      <li>SEAM learns on real-only videos; clips are flagged from how far it scores from the real distribution instead of resembling a specific generator.</li>
+      <li>It is trained on a single generator, and generalizes to 30 unseen ones: SEAM has a 0.92 AUC on 19 unseen open-source generators and 0.87 on 11 unseen commercial ones.</li>
+      <li>The new social-media-based dataset, SLOP, covers videos online that people actually post (collected from Instagram, TikTok, and X, and sorted by style, format, and content).</li>
+      <li>The model tends to fail on more high production clips.</li>
     </ul>
   </fieldset>
 
   <h1>How can we build detectors that work on generators they haven't seen before?</h1>
   <p class="text">
-    Most detectors learn from examples of fakes. But new generators appear faster than anyone can collect
-    examples of them, so a detector trained on yesterday's fakes is often blind to tomorrow's.
+    SEAM fits a Gaussian density to features of real footage (only), and scores a clip by how far it is from that density. A video from a generator the model has never seen is detected for deviating from reality, essentially when it does not resemble anything it had been trained on.
   </p>
   <p class="text">
-    <b>SEAM</b> takes the opposite approach. It fits a Gaussian density to features of <i>real</i> footage
-    only, and scores a clip by how far it falls from that density. A video from a generator the model has never
-    seen is flagged for deviating from reality, not for resembling anything it was trained on.
-  </p>
-  <p class="text">
-    The score combines four streams that together cover the three families of cues in the literature. Here is
-    what each one looks at on a single clip:
+    The score combines four streams; here's what they look like on an example clip:
   </p>
 </div>
 
@@ -126,7 +127,7 @@
     </div>
     <p class="strip-cap">One AI-generated clip, eight frames. The panels below show each stream on frame 4.</p>
     <div class="stream-grid">
-      <figure class="stream-panel sp-spectrum" tabindex="0"><img src="assets/img/streams/spectrum.jpg" alt="Frequency profile of the frame against the range of real footage" loading="lazy">
+      <figure class="stream-panel sp-spectrum" tabindex="0"><svg class="spec-svg" viewBox="0 0 400 226" role="img" aria-label="The frame's frequency profile against the range of real footage, next to the high-pass residual image it is computed from"><defs><pattern id="spec-hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" stroke="#b6bcc2" stroke-width="1.2"/></pattern></defs><image href="assets/img/streams/residual.jpg" x="8" y="22" width="180" height="100" preserveAspectRatio="xMidYMid slice"/><rect x="8" y="22" width="180" height="100" fill="none" stroke="#c9ced2" stroke-width="1"/><text x="98" y="143" text-anchor="middle" font-family="Charter, Georgia, serif" font-size="13.5" fill="#111">What is left after</text><text x="98" y="160" text-anchor="middle" font-family="Charter, Georgia, serif" font-size="13.5" fill="#111">smoothing is removed</text><rect x="321.7" y="16" width="66.3" height="142" fill="url(#spec-hatch)" opacity="0.6"/><text x="354.8" y="87.0" text-anchor="middle" font-family="Charter, Georgia, serif" font-size="13" fill="#444" transform="rotate(90 354.8 87.0)" dy="4.5">discarded</text><path d="M226.0 92.7L228.6 73.7L231.1 58.4L233.7 48.9L236.2 43.4L238.8 39.9L241.3 35.7L243.9 32.5L246.4 30.9L249.0 29.7L251.5 28.8L254.1 29.5L256.6 27.6L259.2 27.0L261.7 26.7L264.3 26.5L266.8 26.0L269.4 26.5L271.9 25.8L274.5 25.8L277.0 26.7L279.6 27.4L282.1 29.3L284.7 30.7L287.2 31.6L289.8 33.4L292.3 35.3L294.9 37.8L297.4 40.1L300.0 42.0L302.5 44.1L305.1 46.9L307.6 49.9L310.2 52.2L312.7 55.6L315.3 58.0L317.8 60.7L320.4 63.7L320.4 135.0L317.8 132.0L315.3 128.3L312.7 126.0L310.2 121.6L307.6 117.4L305.1 113.5L302.5 109.8L300.0 105.9L297.4 102.2L294.9 98.0L292.3 94.5L289.8 90.8L287.2 87.1L284.7 84.3L282.1 81.1L279.6 78.3L277.0 74.9L274.5 72.1L271.9 69.3L269.4 67.2L266.8 64.9L264.3 62.6L261.7 61.0L259.2 60.3L256.6 60.0L254.1 61.0L251.5 62.1L249.0 64.0L246.4 66.1L243.9 69.5L241.3 73.7L238.8 79.7L236.2 85.0L233.7 93.4L231.1 104.7L228.6 120.9L226.0 148.2Z" fill="#9aa1a7" opacity="0.32"/><path d="M226.0 128.5L228.6 90.6L231.1 79.7L233.7 62.4L236.2 61.9L238.8 56.3L241.3 45.5L243.9 51.0L246.4 45.5L249.0 45.5L251.5 50.6L254.1 46.4L256.6 45.9L259.2 49.9L261.7 51.5L264.3 48.5L266.8 51.7L269.4 57.7L271.9 58.7L274.5 57.5L277.0 60.0L279.6 62.6L282.1 63.5L284.7 68.6L287.2 66.3L289.8 71.1L292.3 73.5L294.9 76.0L297.4 80.4L300.0 82.5L302.5 85.5L305.1 90.8L307.6 94.1L310.2 97.1L312.7 100.3L315.3 102.6L317.8 105.9L320.4 107.2" fill="none" stroke="#4a3aa7" stroke-width="2.6" stroke-linejoin="round"/><line x1="226" y1="16" x2="226" y2="158" stroke="#555" stroke-width="1.2"/><line x1="226" y1="158" x2="388" y2="158" stroke="#555" stroke-width="1.2"/><text x="307.0" y="179" text-anchor="middle" font-family="Charter, Georgia, serif" font-size="13.5" fill="#111">spatial frequency, low to high</text><text x="216" y="87.0" text-anchor="middle" font-family="Charter, Georgia, serif" font-size="13.5" fill="#111" transform="rotate(-90 216 87.0)">energy</text><rect x="8" y="184" width="16" height="10" fill="#9aa1a7" opacity="0.4"/><text x="30" y="193" font-family="Charter, Georgia, serif" font-size="13" fill="#444">gray band: range of real footage</text><line x1="8" y1="211" x2="24" y2="211" stroke="#4a3aa7" stroke-width="2.6"/><text x="30" y="215" font-family="Charter, Georgia, serif" font-size="13" fill="#444">purple line: this frame</text></svg>
         <figcaption><span class="kind">Low-level artifacts</span><span class="name">Spatial spectrum</span>
         <span class="desc">Remove the smooth content and look at what is left. The curve shows how much energy the frame has at each spatial frequency; gray is the range real footage occupies. A band dominated by resolution and compression is discarded.</span></figcaption></figure>
       <figure class="stream-panel sp-semantic" tabindex="0"><img src="assets/img/streams/semantic.jpg" alt="Frame with orange patches marking those far from typical real footage" loading="lazy">
@@ -234,9 +235,7 @@
 <div class="container blog main">
   <h1>Social media videos are wildly different from current deepfake detection benchmarks</h1>
   <p class="text">
-    Benchmarks are mostly clips generated in a lab. The videos people actually post are cropped, captioned,
-    filtered and recompressed. <b>SLOP</b> collects AI-generated and real videos from Instagram, TikTok and X so
-    we can test on that kind of footage.
+    Generally, dataset benchmarks for deepfake detection are too clean to represent content often found on social media. Social media videos tend to be cropped, captioned, filtered, recompressed, etc. SLOP collects AI-generated and real videos from Instagram, TikTok and X so we can test on that kind of footage.
   </p>
   <p class="text">
     <b>SLOP has 6,000 posts in a 50:50 split of real and AI-generated content,</b> balanced across Instagram,
@@ -270,9 +269,7 @@
 </div>
 <div class="container blog main">
   <p class="text">
-    <b>The same labels cover very different footage.</b> To understand what a detector has to handle, we sort
-    clips along three axes: style, format and content. Each entry below shows frames from example clips, labeled
-    with the platform and ground-truth label.
+    To better understand our dataset as well as social media content in general, we created a taxonomy that sorts clips along three axes: style, format, and content. See examples of this below.
   </p>
 </div>
 <div class="container blog large gray">
@@ -322,7 +319,7 @@
 <div class="container blog main">
   <h1>Misclassifications made by SEAM</h1>
   <p class="text">
-    <b>SEAM misses fakes more often than it raises false alarms.</b> On SLOP, 72% of the errors are AI clips
+    <b>SEAM tends to miss more AI-generated content than infer real content to be AI.</b> On SLOP, 72% of the errors are AI clips
     predicted as real, and the errors are spread roughly evenly across platforms (39% X, 30% Instagram, 31%
     TikTok). On AIGVDBench the errors concentrate in the unseen-generator conditions, with LTX and EasyAnimate the
     largest sources of missed fakes.

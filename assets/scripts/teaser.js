@@ -16,7 +16,13 @@
       text: "Blue marks patches whose features changed in an unusual way from one frame to the next." }
   ];
 
-  fetch("assets/data/teaser.json").then(function (r) { return r.json(); }).then(init)
+  var CLIPS = [
+    { id: "ai", label: "AI-generated", url: "assets/data/teaser.json", alt: "A frame from an AI-generated video of a corgi in a park" },
+    { id: "real", label: "Real", url: "assets/data/teaser_real.json", alt: "A frame from a real video of a brown SUV on an open airfield, filmed by a moving camera" }
+  ];
+
+  Promise.all(CLIPS.map(function (c) { return fetch(c.url).then(function (r) { return r.json(); }); }))
+    .then(init)
     .catch(function () { root.textContent = "Interactive example unavailable."; });
 
   function el(tag, cls, parent) {
@@ -27,16 +33,24 @@
   }
   function hex(c) { return [parseInt(c.slice(1, 3), 16), parseInt(c.slice(3, 5), 16), parseInt(c.slice(5, 7), 16)]; }
 
-  function init(D) {
-    var T = D.frames.length, G = D.grid;
-    var state = { f: 0, on: {}, playing: !window.matchMedia("(prefers-reduced-motion: reduce)").matches };
-    D.frames.forEach(function (src) { new Image().src = src; });
+  function init(datasets) {
+    var D = datasets[0], T = D.frames.length, G = D.grid;
+    var state = { f: 0, clip: 0, on: {}, playing: !window.matchMedia("(prefers-reduced-motion: reduce)").matches };
+    datasets.forEach(function (ds) { ds.frames.forEach(function (src) { new Image().src = src; }); });
 
     root.innerHTML = "";
+    var tabs = el("div", "se-tabs", root);
+    tabs.setAttribute("role", "tablist");
+    var tabEls = CLIPS.map(function (c, i) {
+      var b = el("button", "tab" + (i === 0 ? " active" : ""), tabs);
+      b.type = "button"; b.textContent = c.label; b.setAttribute("role", "tab");
+      b.addEventListener("click", function () { setClip(i); });
+      return b;
+    });
     var stage = el("div", "se-stage", root);
     stage.style.aspectRatio = String(D.aspect);
     var img = el("img", "se-frame", stage);
-    img.alt = "A frame from an AI-generated video of a corgi in a park";
+    img.alt = CLIPS[0].alt;
     var canvas = el("canvas", "se-canvas", stage);
     var ctx = canvas.getContext("2d");
     var off = document.createElement("canvas"); off.width = G; off.height = G;
@@ -63,7 +77,7 @@
     plotHead.textContent = "Frame spectrum vs. real footage";
     var svgNS = "http://www.w3.org/2000/svg";
     var svg = document.createElementNS(svgNS, "svg");
-    svg.setAttribute("viewBox", "0 0 300 96"); svg.setAttribute("role", "img");
+    svg.setAttribute("viewBox", "0 0 300 112"); svg.setAttribute("role", "img");
     svg.setAttribute("aria-label", "Radial frequency profile of the current frame against the range real footage occupies");
     plotWrap.appendChild(svg);
     var noteList = el("div", "se-note-list", notes);
@@ -88,6 +102,16 @@
       if (!state.playing || document.hidden) return;
       state.f = (state.f + 1) % T; render();
     }, 650);
+
+    function setClip(i) {
+      state.clip = i; state.f = 0;
+      D = datasets[i]; T = D.frames.length; G = D.grid;
+      off.width = G; off.height = G;
+      stage.style.aspectRatio = String(D.aspect);
+      img.alt = CLIPS[i].alt;
+      tabEls.forEach(function (b, j) { b.classList.toggle("active", j === i); b.setAttribute("aria-selected", j === i ? "true" : "false"); });
+      render();
+    }
 
     function heat(vals, color, lo) {
       var c = hex(color), id = off.getContext("2d").createImageData(G, G);
@@ -155,8 +179,8 @@
         '<path d="' + top + bot + 'Z" fill="#9aa1a7" opacity="0.28"/>' +
         '<path d="' + line + '" fill="none" stroke="#4a3aa7" stroke-width="2.2" stroke-linejoin="round"/>' +
         '<line x1="0" y1="90" x2="300" y2="90" stroke="#8a9198" stroke-width="1"/>' +
-        '<text x="2" y="95" class="se-t">low frequency</text>' +
-        '<text x="298" y="95" text-anchor="end" class="se-t">high</text>';
+        '<text x="2" y="106" class="se-t">low frequency</text>' +
+        '<text x="298" y="106" text-anchor="end" class="se-t">high</text>';
     }
 
     function render() {

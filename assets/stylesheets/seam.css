@@ -307,3 +307,13 @@ table.blocks { width: 100%; margin: 0; }
 .wide .caption { font-family: "Charter", Georgia, serif; font-size: 84%; line-height: 1.35; padding: 8px 0 2vh; }
 .wide table.blocks td.grp { min-width: 0; width: 1%; }
 .wide table.blocks th, .wide table.blocks td { padding-left: 0.5em; padding-right: 0.5em; }
+
+/* diagram text uses the site font */
+.plot-wrap text, .plot-wrap .tip { font-family: var(--head); }
+.se-t { font-family: var(--head); font-size: 11px; fill: #333; }
+.stream-panel svg.spec-svg { display: block; width: 100%; height: auto; border-radius: 6px; background: #fff; }
+
+/* hero: AI / Real tabs attached to the example frame */
+.se-tabs { display: flex; gap: 4px; position: relative; z-index: 2; margin: 0; }
+.se-tabs .tab { padding: 8px 16px 8px; font-size: 13px; margin-bottom: -1.5px; }
+.stream-explorer .se-stage { border: 1.5px solid #dfe6e9; border-radius: 0 8px 8px 8px; }
