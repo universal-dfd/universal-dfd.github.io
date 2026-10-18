@@ -317,3 +317,26 @@ table.blocks { width: 100%; margin: 0; }
 .se-tabs { display: flex; gap: 4px; position: relative; z-index: 2; margin: 0; }
 .se-tabs .tab { padding: 8px 16px 8px; font-size: 13px; margin-bottom: -1.5px; }
 .stream-explorer .se-stage { border: 1.5px solid #dfe6e9; border-radius: 0 8px 8px 8px; }
+
+/* on-frame annotations replace the explanation paragraphs */
+.se-notes { min-height: 0; }
+.se-note.empty { border-left: 0; padding-left: 0; font-style: italic; color: #666; }
+
+/* taxonomy cards: looping video previews */
+.tcard .tvid { display: block; margin: 0 auto; width: min(100%, calc(250px * var(--ar, .5625))); height: auto; aspect-ratio: var(--ar, .5625); border-radius: 8px; background: #111; object-fit: cover; }
+.tcard .clip .meta { justify-content: center; }
+.fcard .tvid { display: block; margin: 0 auto; width: min(100%, calc(210px * var(--ar, .5625))); height: auto; aspect-ratio: var(--ar, .5625); border-radius: 8px; background: #111; object-fit: cover; }
+.fcard .fchips { justify-content: center; }
+
+/* clickable Key Takeaways */
+html { scroll-behavior: smooth; }
+#method, #results, #slop, #failures { scroll-margin-top: 28px; }
+.summary-card li { transition: transform .18s ease, background-color .18s ease; transform-origin: left center; border-radius: 6px; }
+.summary-card li::marker { font-size: 1em; color: var(--ink-2); }
+.summary-card li:hover, .summary-card li:focus-within { transform: scale(1.025); background: #f3f4f6; }
+.summary-card li:hover::marker, .summary-card li:focus-within::marker { font-size: 1.5em; color: var(--ink); }
+.summary-card li a { display: block; color: inherit; text-decoration: none; cursor: pointer; border-radius: 6px; }
+.summary-card li a:focus-visible { outline: 2px solid #4a3aa7; outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .summary-card li { transition: none; } }
+.summary-card li { transition: transform .18s ease, background-color .18s ease, opacity .18s ease; }
+.summary-card ul:hover li:not(:hover) { opacity: .55; }

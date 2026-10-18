@@ -7,13 +7,13 @@
 
   var STREAMS = [
     { id: "spectrum", name: "Spatial spectrum", kind: "Low-level artifacts", color: "#4a3aa7",
-      text: "How much energy each frame has at every spatial frequency. The gray band is the range real footage occupies; the hatched region is a high-frequency band we discard because it mostly encodes resolution and compression." },
+      label: "fine detail" },
     { id: "semantic", name: "Semantic spatial", kind: "Learned representations", color: "#eb6834",
-      text: "A frozen encoder reads each patch of the frame. Orange marks patches that sit farthest from typical patches of real footage." },
+      label: "unusual patches" },
     { id: "motion", name: "Motion coherence", kind: "Physical plausibility", color: "#0f8f8f",
-      text: "Arrows follow each patch to its best match in the next frame, shown where the match is confident. Real motion carries neighbors along together; regenerated frames often don't." },
+      label: "movement" },
     { id: "change", name: "Semantic change", kind: "Physical plausibility", color: "#2a78d6",
-      text: "Blue marks patches whose features changed in an unusual way from one frame to the next." }
+      label: "change" }
   ];
 
   var CLIPS = [
@@ -36,7 +36,12 @@
   function init(datasets) {
     var D = datasets[0], T = D.frames.length, G = D.grid;
     var state = { f: 0, clip: 0, on: {}, playing: !window.matchMedia("(prefers-reduced-motion: reduce)").matches };
-    datasets.forEach(function (ds) { ds.frames.forEach(function (src) { new Image().src = src; }); });
+    var edgeCache = {};
+    datasets.forEach(function (ds) {
+      ds._imgs = ds.frames.map(function (src) {
+        var im = new Image(); im.onload = function () { edgeCache = {}; draw(); }; im.src = src; return im;
+      });
+    });
 
     root.innerHTML = "";
     var tabs = el("div", "se-tabs", root);
@@ -145,14 +150,120 @@
       }
     }
 
+    /* where the fine detail is: a Sobel edge map of the current frame, tinted purple */
+    function edgeMap() {
+      var key = state.clip + ":" + state.f;
+      if (edgeCache[key]) return edgeCache[key];
+      var im = D._imgs[state.f];
+      if (!im || !im.complete || !im.naturalWidth) return null;
+      var w = 160, h = Math.round(w / D.aspect), c = document.createElement("canvas");
+      c.width = w; c.height = h;
+      var cx = c.getContext("2d"); cx.drawImage(im, 0, 0, w, h);
+      var px = cx.getImageData(0, 0, w, h).data, g = new Float32Array(w * h), mag = new Float32Array(w * h), i, x, y;
+      for (i = 0; i < w * h; i++) g[i] = 0.299 * px[i * 4] + 0.587 * px[i * 4 + 1] + 0.114 * px[i * 4 + 2];
+      for (y = 1; y < h - 1; y++) for (x = 1; x < w - 1; x++) {
+        var k = y * w + x,
+            gx = g[k - w + 1] + 2 * g[k + 1] + g[k + w + 1] - g[k - w - 1] - 2 * g[k - 1] - g[k + w - 1],
+            gy = g[k + w - 1] + 2 * g[k + w] + g[k + w + 1] - g[k - w - 1] - 2 * g[k - w] - g[k - w + 1];
+        mag[k] = Math.sqrt(gx * gx + gy * gy);
+      }
+      var sorted = Array.prototype.slice.call(mag).sort(function (a, b) { return a - b; }), p95 = sorted[Math.floor(sorted.length * 0.95)] || 1;
+      var out = document.createElement("canvas"); out.width = w; out.height = h;
+      var ox = out.getContext("2d"), id = ox.createImageData(w, h);
+      for (i = 0; i < w * h; i++) {
+        var a = Math.min(1, mag[i] / p95);
+        id.data[i * 4] = 74; id.data[i * 4 + 1] = 58; id.data[i * 4 + 2] = 167;
+        id.data[i * 4 + 3] = Math.round(255 * 0.8 * Math.pow(a, 1.4));
+      }
+      ox.putImageData(id, 0, 0);
+      var cell = 10, best = -1, bx = 0.5, by = 0.5;
+      for (y = 0; y + cell <= h; y += 5) for (x = 0; x + cell <= w; x += 5) {
+        var sum = 0;
+        for (var yy = 0; yy < cell; yy++) for (var xx = 0; xx < cell; xx++) sum += mag[(y + yy) * w + x + xx];
+        if (sum > best) { best = sum; bx = (x + cell / 2) / w; by = (y + cell / 2) / h; }
+      }
+      return (edgeCache[key] = { canvas: out, x: bx, y: by });
+    }
+
+    /* the hottest 3x3 block of a G x G map, as a point in 0..1 */
+    function hotspot(vals) {
+      var best = -1, bx = 0.5, by = 0.5;
+      for (var y = 0; y + 3 <= G; y++) for (var x = 0; x + 3 <= G; x++) {
+        var sum = 0;
+        for (var j = 0; j < 3; j++) for (var i = 0; i < 3; i++) sum += vals[(y + j) * G + x + i];
+        if (sum > best) { best = sum; bx = (x + 1.5) / G; by = (y + 1.5) / G; }
+      }
+      return { x: bx, y: by };
+    }
+
+    /* midpoint of the longest confident arrow */
+    function longestArrow() {
+      var p = Math.min(state.f, T - 2), best = 0, pt = null;
+      for (var k = 0; k < G * G; k++) {
+        if (D.conf[p][k] < 0.94) continue;
+        var dy = D.disp[p][k][0], dx = D.disp[p][k][1], len = Math.sqrt(dx * dx + dy * dy);
+        if (len > best) { best = len; pt = { x: ((k % G) + 0.5 + dx * 0.4) / G, y: (Math.floor(k / G) + 0.5 + dy * 0.4) / G }; }
+      }
+      return pt;
+    }
+
+    function annotate() {
+      var W = canvas.width, H = canvas.height, dpr = W / canvas.clientWidth;
+      ctx.font = "700 " + 13.5 * dpr + "px Charter, Georgia, serif";
+      ctx.textBaseline = "middle";
+      var targets = [];
+      STREAMS.forEach(function (s) {
+        if (!state.on[s.id]) return;
+        var t = null;
+        if (s.id === "semantic") t = hotspot(D.spatial[state.f]);
+        else if (s.id === "change") t = hotspot(D.change[Math.min(state.f, T - 2)]);
+        else if (s.id === "motion") t = longestArrow();
+        else if (s.id === "spectrum") { var e = edgeMap(); t = e && { x: e.x, y: e.y }; }
+        if (t) targets.push({ s: s, x: t.x * W, y: t.y * H });
+      });
+      /* pills stack in two columns at the frame edges, ordered by height, so they never overlap */
+      var padX = 10 * dpr, ph = 26 * dpr, gap = 7 * dpr, edge = 8 * dpr;
+      targets.forEach(function (t) { t.w = ctx.measureText(t.s.label).width + 2 * padX; t.left = t.x < W * 0.5; });
+      [true, false].forEach(function (leftSide) {
+        var col = targets.filter(function (t) { return t.left === leftSide; }).sort(function (a, b) { return a.y - b.y; });
+        col.forEach(function (t, i) {
+          t.py = Math.max(edge, t.y - ph / 2);
+          if (i && t.py < col[i - 1].py + ph + gap) t.py = col[i - 1].py + ph + gap;
+        });
+        var over = col.length ? col[col.length - 1].py + ph + edge - H : 0;
+        if (over > 0) col.forEach(function (t) { t.py -= over; });
+        col.forEach(function (t) { t.py = Math.max(edge, t.py); });
+      });
+      targets.forEach(function (t) {
+        var px = t.left ? edge : W - t.w - edge, py = t.py;
+        var ax = t.left ? px + t.w : px, ay = py + ph / 2;
+        ctx.lineCap = "round";
+        ctx.beginPath(); ctx.moveTo(t.x, t.y); ctx.lineTo(ax, ay);
+        ctx.strokeStyle = "rgba(255,255,255,0.95)"; ctx.lineWidth = 4 * dpr; ctx.stroke();
+        ctx.strokeStyle = t.s.color; ctx.lineWidth = 2 * dpr; ctx.stroke();
+        ctx.beginPath(); ctx.arc(t.x, t.y, 6 * dpr, 0, 2 * Math.PI);
+        ctx.fillStyle = "#fff"; ctx.fill(); ctx.lineWidth = 2.5 * dpr; ctx.strokeStyle = t.s.color; ctx.stroke();
+        ctx.beginPath();
+        if (ctx.roundRect) ctx.roundRect(px, py, t.w, ph, 13 * dpr); else ctx.rect(px, py, t.w, ph);
+        ctx.fillStyle = "rgba(255,255,255,0.96)"; ctx.fill();
+        ctx.lineWidth = 2 * dpr; ctx.strokeStyle = t.s.color; ctx.stroke();
+        ctx.fillStyle = "#111"; ctx.fillText(t.s.label, px + padX, py + ph / 2 + dpr);
+      });
+    }
+
     function draw() {
       var dpr = window.devicePixelRatio || 1, w = stage.clientWidth, h = stage.clientHeight;
       if (!w) return;
       canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (state.on.spectrum) {
+        var e = edgeMap();
+        if (e) { ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = "high"; ctx.drawImage(e.canvas, 0, 0, canvas.width, canvas.height); }
+      }
       if (state.on.semantic) heat(D.spatial[state.f], "#eb6834", 0.35);
       if (state.on.change) heat(D.change[Math.min(state.f, T - 2)], "#2a78d6", 0.35);
       if (state.on.motion) arrows();
+      annotate();
     }
 
     function drawSpectrum() {
@@ -188,19 +299,11 @@
       dotEls.forEach(function (d, i) { d.classList.toggle("on", i === state.f); });
       play.textContent = state.playing ? "Pause" : "Play";
       play.setAttribute("aria-label", state.playing ? "Pause the clip" : "Play the clip");
-      var any = false;
+      var any = STREAMS.some(function (s) { return state.on[s.id]; });
       noteList.innerHTML = "";
-      STREAMS.forEach(function (s) {
-        if (!state.on[s.id]) return;
-        any = true;
-        var n = el("div", "se-note", noteList);
-        n.style.setProperty("--c", s.color);
-        var b = el("b", "", n); b.textContent = s.name + ". ";
-        n.appendChild(document.createTextNode(s.text));
-      });
       if (!any) {
         var e = el("div", "se-note empty", noteList);
-        e.textContent = "Check a stream to see what it measures on this clip.";
+        e.textContent = "Check a stream to mark it on the frame.";
       }
       plotWrap.style.display = state.on.spectrum ? "block" : "none";
       if (state.on.spectrum) drawSpectrum();
@@ -209,5 +312,6 @@
 
     state.on.semantic = true; STREAMS[1].cb.checked = true;
     render();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
   }
 })();

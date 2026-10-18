@@ -362,3 +362,18 @@
     });
   });
 })();
+
+/* taxonomy video previews: load and play only while on screen */
+(function () {
+  var vids = document.querySelectorAll('video.tvid');
+  if (!vids.length) return;
+  function start(v) {
+    if (!v.getAttribute('src')) v.src = v.getAttribute('data-src');
+    var p = v.play(); if (p && p.catch) p.catch(function () {});
+  }
+  if (!('IntersectionObserver' in window)) { vids.forEach(start); return; }
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) start(e.target); else e.target.pause(); });
+  }, { threshold: 0.25 });
+  vids.forEach(function (v) { io.observe(v); });
+})();
