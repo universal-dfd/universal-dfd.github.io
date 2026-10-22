@@ -1,0 +1,32 @@
+{
+ "auc": 0.7978737997256515,
+ "tpr": 0.5555555555555556,
+ "n_real": 270,
+ "n_ai": 270,
+ "clips": [
+  {
+   "id": "c0",
+   "kind": "real",
+   "generator": null,
+   "prob": 1.1634256225079298e-08
+  },
+  {
+   "id": "c1",
+   "kind": "ai",
+   "generator": "Gen3",
+   "prob": 1.075499426406168e-06
+  },
+  {
+   "id": "c2",
+   "kind": "real",
+   "generator": null,
+   "prob": 5.124658336574939e-11
+  },
+  {
+   "id": "c3",
+   "kind": "ai",
+   "generator": "wan",
+   "prob": 1.5165565855568275e-05
+  }
+ ]
+}
