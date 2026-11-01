@@ -5,7 +5,8 @@
 
    Every token (--ink, --sans, --rule, --navy, …) comes from template.css
    and nothing here redefines one. Labels, controls and plot text use the
-   sans stack; running text and captions stay in Charter. Color is kept
+   sans stack, and so does any text inside a figure or plot; running text
+   and captions stay in Charter. Color is kept
    for data: the four stream hues, AI vs. real, and the plot groups.
    =================================================================== */
 
@@ -137,6 +138,9 @@ table.data td b { color: var(--ink); }
   display: block; width: 100%; height: auto;
   border-radius: 6px; padding: 0 !important; margin: 0 0 10px;
 }
+/* text inside a figure is set in the sans, like the rest of the figure;
+   template.css sets .card-body in Charter for quotation cards */
+.stream-grid .card-body { font-family: var(--sans); font-size: 14px; line-height: 1.5; }
 .stream-grid .swatch {
   display: inline-block; width: 9px; height: 9px; border-radius: 50%;
   margin-right: 7px; vertical-align: 1px;
@@ -251,7 +255,7 @@ table.data td b { color: var(--ink); }
   font: 700 26px/1 var(--sans); margin-right: 10px; vertical-align: middle;
   font-variant-numeric: tabular-nums;
 }
-.story-stat .txt { font: 15px/1.4 "Charter", Georgia, serif; color: var(--ink-2); vertical-align: middle; }
+.story-stat .txt { font: 14.5px/1.4 var(--sans); color: var(--ink-2); vertical-align: middle; }
 
 .plot-wrap svg { display: block; width: 100%; height: auto; }
 .plot-wrap .gridline { stroke: var(--hair); stroke-width: 1; }
