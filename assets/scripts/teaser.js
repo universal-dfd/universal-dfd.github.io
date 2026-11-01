@@ -229,7 +229,7 @@
     function annotate(st, motionTip) {
       var W = st.canvas.width, H = st.canvas.height, dpr = W / st.canvas.clientWidth, u = st.u, D = st.ds, ctx = st.ctx;
       var fs = Math.max(8.5, 13.5 * u * 0.75) * dpr;
-      ctx.font = "700 " + fs + "px Charter, Georgia, serif";
+      ctx.font = "700 " + fs + "px HelveticaNeue, 'Helvetica Neue', Helvetica, Arial, sans-serif";
       ctx.textBaseline = "middle";
       var targets = [];
       STREAMS.forEach(function (s) {
@@ -267,7 +267,7 @@
         if (ctx.roundRect) ctx.roundRect(px, py, t.w, ph, ph / 2); else ctx.rect(px, py, t.w, ph);
         ctx.fillStyle = "rgba(255,255,255,0.58)"; ctx.fill();
         ctx.lineWidth = 1.5 * dpr; ctx.strokeStyle = t.s.color; ctx.stroke();
-        ctx.fillStyle = "#111"; ctx.fillText(t.s.label, px + padX, py + ph / 2 + dpr * 0.5);
+        ctx.fillStyle = "#353535"; ctx.fillText(t.s.label, px + padX, py + ph / 2 + dpr * 0.5);
       });
     }
 

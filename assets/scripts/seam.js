@@ -1,4 +1,4 @@
-/* Tabs, "show all" buttons and the embedding explorer. */
+/* Gallery view toggles and the embedding explorer. */
 (function () {
   "use strict";
 
@@ -18,15 +18,6 @@
     });
   });
 
-  document.querySelectorAll(".show-more").forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      var more = document.querySelector("#" + btn.dataset.target + " .more");
-      if (!more) return;
-      more.hidden = !more.hidden;
-      btn.textContent = more.hidden ? "Show all" : "Show fewer";
-    });
-  });
-
   /* ---------------- embedding explorer ---------------- */
   var BLUE = "#2a78d6", GREEN = "#1baf7a", PURPLE = "#4a3aa7",
       ORANGE = "#eb6834", RED = "#e34948", GOLD = "#eda100", INK = "#353535";
@@ -43,7 +34,7 @@
       title: "AIGVDBench",
       views: [
         { id: "story", label: "Reveal", story: true, groups: BUCKETS },
-        { id: "bucket", label: "Training / unseen / real", groups: BUCKETS },
+        { id: "bucket", label: "By group", groups: BUCKETS },
         { id: "gen", label: "By generator", groups: [
           { label: "Training generator", color: BLUE, shape: "cross", members: ["ID"] },
           { label: "HunyuanVideo", color: GREEN, shape: "cross", members: ["HunyuanVideo"] },
@@ -148,12 +139,13 @@
     var spec = EXPLORERS[key];
     var state = { view: 0, hidden: {}, step: key === "aigvd" ? 4 : 0, playing: false, fresh: -1, played: false, timer: null };
     root.innerHTML = "";
-    h("h3", "", root, spec.title);
-
-    var tabbed = h("div", "tabbed", root);
-    var bar = h("div", "tabs ex-tabs", tabbed);
+    /* one white card: title and view toggle on top, then the plot */
+    var body = h("div", "tab-body ex-card plot-wrap", root);
+    var head = h("div", "ex-head", body);
+    h("h3", "ex-title", head, spec.title);
+    var bar = h("div", "tabs ex-tabs", head);
     bar.setAttribute("role", "tablist");
-    var body = h("div", "tab-body plot-wrap", tabbed);
+    bar.setAttribute("aria-label", spec.title + " plot view");
 
     var story = h("div", "story-bar", body);
     var stepBtns = [];
@@ -290,7 +282,7 @@
     function updateStat(animate) {
       var gi = state.step === 2 ? 0 : state.step === 3 ? 1 : state.step === 4 ? 2 : -1;
       if (gi < 0) {
-        stat.innerHTML = '<span class="num">&nbsp;</span><span class="txt">The dashed outline holds 95% of real footage in this two-dimensional view.</span>';
+        stat.innerHTML = '<span class="txt">The dashed outline holds 95% of real footage in this two-dimensional view.</span>';
         return;
       }
       stat.innerHTML = '<span class="num"></span><span class="txt"></span>';
@@ -328,11 +320,11 @@
 
     spec.views.forEach(function (v, i) {
       var b = h("button", "tab" + (i === 0 ? " active" : ""), bar, v.label);
-      b.type = "button"; b.setAttribute("role", "tab");
+      b.type = "button"; b.setAttribute("role", "tab"); b.setAttribute("aria-selected", i === 0 ? "true" : "false");
       b.addEventListener("click", function () {
         stopPlay();
         state.view = i; state.fresh = -1;
-        bar.querySelectorAll(".tab").forEach(function (x, j) { x.classList.toggle("active", j === i); });
+        bar.querySelectorAll(".tab").forEach(function (x, j) { x.classList.toggle("active", j === i); x.setAttribute("aria-selected", j === i ? "true" : "false"); });
         render();
         if (v.story) updateStat(false);
       });

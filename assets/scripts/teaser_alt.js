@@ -258,7 +258,7 @@
 
   window.TeaserAlt = { mountPortholes: mountPortholes, mountStories: mountStories };
 
-  /* the variant switch: A original explorer, B circle lens, C stories. ?teaser=a|b|c opens one directly. */
+  /* the view toggle: A four streams, B circle lens, C stories. ?teaser=a|b|c opens one directly. */
   function initSwitch() {
     var sw = document.getElementById("tz-switch"); if (!sw) return;
     var EYE = { a: "See the four streams on an example video", b: "Slide a lens over two clips", c: "Can you tell which clip is AI?" };
@@ -268,7 +268,7 @@
     var BASE = "assets/teaser_alt/";
     function show(v) {
       Object.keys(panes).forEach(function (k) { panes[k].hidden = k !== v; });
-      sw.querySelectorAll("button").forEach(function (b) { b.classList.toggle("on", b.getAttribute("data-v") === v); });
+      sw.querySelectorAll("button").forEach(function (b) { var on = b.getAttribute("data-v") === v; b.classList.toggle("on", on); b.setAttribute("aria-selected", on ? "true" : "false"); });
       eye.textContent = EYE[v]; credit.firstChild.nodeValue = "Example clips: "; credit.lastChild.nodeValue = " (CC BY 4.0), trimmed." + CREDIT[v];
       if (v === "b" && !mounted.b) { mounted.b = true; mountPortholes(panes.b, BASE + "portholes/"); }
       if (v === "c" && !mounted.c) { mounted.c = true; mountStories(panes.c, BASE + "stories/"); }

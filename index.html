@@ -16,22 +16,29 @@
     <meta content="SEAM unifies artifact, physical-plausibility and deep-embedding cues to detect AI-generated video across unseen generators; SLOP is a dataset of 6,000 real and AI-generated videos from Instagram, TikTok and X." property="og:description">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:description" content="Universal Representations for Robust AI-Generated Video Detection">
+    <!-- Drop a 1200x630 preview into assets/img/ and point at it here:
+    <meta content="https://universal-dfd.github.io/assets/img/social-card.png" property="og:image"> -->
 
     <link rel="stylesheet" type="text/css" media="all" href="assets/stylesheets/main_free.css" />
     <link rel="stylesheet" type="text/css" media="all" href="clarity/clarity.css" />
     <link rel="stylesheet" type="text/css" media="all" href="assets/stylesheets/template.css" />
-    <link rel="stylesheet" type="text/css" media="all" href="assets/stylesheets/seam.css?v=1792653624" />
-    <link rel="stylesheet" type="text/css" media="all" href="assets/stylesheets/teaser_alt.css?v=1792653884" />
+    <!-- This page's own components, on the template's tokens. -->
+    <link rel="stylesheet" type="text/css" media="all" href="assets/stylesheets/seam.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="assets/stylesheets/teaser_alt.css" />
     <link href="assets/fontawesome-free-7.1.0-web/css/all.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600;700&display=swap" rel="stylesheet">
 
+    <!-- navbar.js builds the floating section nav from the <h1>/<h2> tags
+         inside .container.blog.main. Nothing to configure. -->
     <script src="assets/scripts/navbar.js"></script>
+    <!-- Slide menus, video controls and the carousel. -->
     <script src="assets/scripts/main.js" defer></script>
-    <script src="assets/scripts/seam.js?v=1792653624" defer></script>
-    <script src="assets/scripts/teaser_alt.js?v=1792653884" defer></script>
-    <script src="assets/scripts/teaser.js?v=1792653624" defer></script>
+    <!-- Gallery toggles, the embedding explorer and the hero teasers. -->
+    <script src="assets/scripts/seam.js" defer></script>
+    <script src="assets/scripts/teaser_alt.js" defer></script>
+    <script src="assets/scripts/teaser.js" defer></script>
 </head>
 
 <body onload="if (document.activeElement) document.activeElement.blur();">
@@ -58,24 +65,24 @@
 
         <div class="info" style="margin-top:1.2em;">
           <div>
-            <a href="#" class="button icon frosted">Paper <i class="fa-solid fa-book-open"></i></a> &nbsp;&nbsp;
-            <a href="#" class="button icon frosted">Code <i class="fa-solid fa-code"></i></a> &nbsp;&nbsp;
-            <a href="#" class="button icon frosted">Models <i class="fa-solid fa-hexagon-nodes"></i></a> &nbsp;&nbsp;
-            <a href="#" class="button icon frosted">Data <i class="fa-solid fa-database"></i></a>
+            <a href="#" class="button icon frosted" onclick="alert('Paper coming soon.'); return false;">Paper <i class="fa-solid fa-book-open"></i></a> &nbsp;&nbsp;
+            <a href="#" class="button icon frosted" onclick="alert('Code coming soon.'); return false;">Code <i class="fa-solid fa-code"></i></a> &nbsp;&nbsp;
+            <a href="#" class="button icon frosted" onclick="alert('Models coming soon.'); return false;">Models <i class="fa-solid fa-hexagon-nodes"></i></a> &nbsp;&nbsp;
+            <a href="#" class="button icon frosted" onclick="alert('SLOP coming soon.'); return false;">Data <i class="fa-solid fa-database"></i></a>
           </div>
         </div>
       </div>
     </div>
 
     <div class="blog-cover" style="width:100% !important; overflow:hidden; align-items:center;">
-      <!-- Placeholder for the teaser figure. -->
       <div class="cover-frame">
-        <div class="tz-switch" id="tz-switch" role="tablist" aria-label="Teaser version">
-          <button type="button" data-v="a" class="on">A &middot; Original</button>
-          <button type="button" data-v="b">B &middot; Circle lens</button>
-          <button type="button" data-v="c">C &middot; Stories</button>
+        <!-- Three views of the same idea behind one toggle; ?teaser=a|b|c opens one directly. -->
+        <div class="tz-switch" id="tz-switch" role="tablist" aria-label="Teaser view">
+          <button type="button" role="tab" data-v="a" class="on" aria-selected="true">Four streams</button>
+          <button type="button" role="tab" data-v="b" aria-selected="false">Lens</button>
+          <button type="button" role="tab" data-v="c" aria-selected="false">Real or AI?</button>
         </div>
-        <p class="eyebrow se-eyebrow" id="tz-eyebrow">See the four streams on an example video</p>
+        <p class="eyebrow tz-eyebrow" id="tz-eyebrow">See the four streams on an example video</p>
         <div id="stream-explorer" class="stream-explorer tz-pane"><noscript>Enable JavaScript to explore the four streams on an example clip.</noscript></div>
         <div id="tz-b" class="tz-pane" hidden></div>
         <div id="tz-c" class="tz-pane" hidden></div>
@@ -85,74 +92,87 @@
   </div>
 </div>
 
-<!-- ============================ CONTENT ============================ -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- ============================ OVERVIEW ============================ -->
+<!-- ============================ OPENING ============================ -->
 <div class="container blog main first" id="blog-main">
-  <fieldset class="summary-card">
-    <legend class="summary-title">Key Takeaways</legend>
-    <ul>
-      <li><a href="#method">SEAM learns on real-only videos; clips are flagged from how far it scores from the real distribution instead of resembling a specific generator.</a></li>
-      <li><a href="#results">It is trained on a single generator, and generalizes to 30 unseen ones: SEAM has a 0.92 AUC on 19 unseen open-source generators and 0.87 on 11 unseen commercial ones.</a></li>
-      <li><a href="#slop">The new social-media-based dataset, SLOP, covers videos online that people actually post (collected from Instagram, TikTok, and X, and sorted by style, format, and content).</a></li>
-      <li><a href="#failures">The model tends to fail on more high production clips.</a></li>
+  <p class="text">
+    A detector of AI-generated video is trained on the generators that exist today and then asked about the
+    ones released after it. That second job is where detectors fall short: whether they look for low-level
+    generation artifacts, test whether what happens on screen is physically plausible, or learn a classifier
+    over deep embeddings, they generalize poorly beyond the generators they were trained on. It is also hard
+    to say which of the three works best, because published comparisons often set a small detector against one
+    with a much larger backbone, on benchmarks far cleaner than the cropped, captioned and recompressed videos
+    people actually scroll past.
+  </p>
+
+  <fieldset class="insights-box">
+    <legend>Key takeaways</legend>
+    <ul style="margin-left:1.5em;margin-bottom:0;margin-top:0;">
+      <li style="margin-bottom:.8em;"><b>Flag what is far from real, not what looks like a known generator.</b>
+        SEAM fits a density to features of real footage only, and scores a clip by how far it sits from it.</li>
+      <li style="margin-bottom:.8em;"><b>Trained on one generator, it generalizes to thirty.</b>
+        SEAM reaches 0.92 AUC on 19 unseen open-source generators and 0.87 on 11 unseen commercial ones,
+        including Sora, Kling and Pika.</li>
+      <li style="margin-bottom:.8em;"><b>SLOP, a dataset of what people actually post.</b>
+        6,000 real and AI-generated videos from Instagram, TikTok and X, sorted by style, format and content.
+        SEAM leads in-domain at 0.96 AUC.</li>
+      <li style="margin-bottom:0;"><b>Polished clips are its blind spot.</b>
+        Most of SEAM's errors on SLOP are AI clips it passes as real, and the real clips it flags tend to be
+        heavily produced.</li>
     </ul>
   </fieldset>
+</div>
 
+<!-- ============================ METHOD ============================ -->
+<div class="container blog main">
   <h1 id="method">How can we build detectors that work on generators they haven't seen before?</h1>
   <p class="text">
-    SEAM fits a Gaussian density to features of real footage (only), and scores a clip by how far it is from that density. A video from a generator the model has never seen is detected for deviating from reality, essentially when it does not resemble anything it had been trained on.
+    SEAM fits a Gaussian density to features of real footage (only), and scores a clip by how far it is from
+    that density. A video from a generator the model has never seen is detected for deviating from reality,
+    essentially when it does not resemble anything it had been trained on.
   </p>
   <p class="text">
     The score combines four streams; here's what they look like on an example clip:
   </p>
 </div>
 
-<div class="container blog large gray">
-  <div class="figure-card stream-fig">
+<div class="container blog large gray" style="padding-top:3vh; padding-bottom:1.5vh;">
+  <div class="figure-card filmstrip-card">
     <div class="filmstrip">
       <img src="assets/img/teaser/f0.jpg" alt=""><img src="assets/img/teaser/f1.jpg" alt=""><img src="assets/img/teaser/f2.jpg" alt=""><img src="assets/img/teaser/f3.jpg" alt=""><img src="assets/img/teaser/f4.jpg" alt=""><img src="assets/img/teaser/f5.jpg" alt=""><img src="assets/img/teaser/f6.jpg" alt=""><img src="assets/img/teaser/f7.jpg" alt="">
     </div>
-    <div class="stream-grid">
-      <figure class="stream-panel sp-spectrum" tabindex="0"><img src="assets/img/streams/spectrum.jpg?v=1792637070" alt="Frame with its fine detail, edges and texture, marked in purple" loading="lazy">
-        <figcaption><span class="kind">Low-level artifacts</span><span class="name">Spatial spectrum</span>
-        <span class="desc">Strips away the smooth parts of the picture and looks at the fine detail left over (purple): edges and texture, where generators tend to leave traces.</span></figcaption></figure>
-      <figure class="stream-panel sp-semantic" tabindex="0"><img src="assets/img/streams/semantic.jpg" alt="Frame with orange patches marking those far from typical real footage" loading="lazy">
-        <figcaption><span class="kind">Learned representations</span><span class="name">Spatial semantics</span>
-        <span class="desc">A frozen encoder reads each patch. Orange marks patches that sit far from typical patches of real footage.</span></figcaption></figure>
-      <figure class="stream-panel sp-motion" tabindex="0"><img src="assets/img/streams/motion.jpg" alt="Frame with arrows following patches to their match in the next frame" loading="lazy">
-        <figcaption><span class="kind">Physical plausibility</span><span class="name">Motion coherence</span>
-        <span class="desc">Each arrow follows a patch to its best match in the next frame. Real motion carries neighbors along together.</span></figcaption></figure>
-      <figure class="stream-panel sp-change" tabindex="0"><img src="assets/img/streams/change.jpg?v=1792381466" alt="Two views of the same frame pair: raw pixel difference on the left, the model's semantic change map in blue on the right" loading="lazy">
-        <figcaption><span class="kind">Physical plausibility</span><span class="name">Semantic change</span>
-        <span class="desc">Left: where raw pixels moved between two frames. Right: where the encoder's features changed unusually (blue). They are different things.</span></figcaption></figure>
+  </div>
+  <div class="stream-grid">
+    <div class="card">
+      <div class="card-head"><span><span class="swatch" style="background:#4a3aa7"></span>Spatial spectrum</span><span class="eyebrow">Low-level artifacts</span></div>
+      <img src="assets/img/streams/spectrum.jpg?v=1792637070" alt="Frame with its fine detail, edges and texture, marked in purple" loading="lazy">
+      <div class="card-body">Strips away the smooth parts of the picture and looks at the fine detail left over (purple): edges and texture, where generators tend to leave traces.</div>
+    </div>
+    <div class="card">
+      <div class="card-head"><span><span class="swatch" style="background:#eb6834"></span>Spatial semantics</span><span class="eyebrow">Learned representations</span></div>
+      <img src="assets/img/streams/semantic.jpg" alt="Frame with orange patches marking those far from typical real footage" loading="lazy">
+      <div class="card-body">A frozen encoder reads each patch. Orange marks patches that sit far from typical patches of real footage.</div>
+    </div>
+    <div class="card">
+      <div class="card-head"><span><span class="swatch" style="background:#0f8f8f"></span>Motion coherence</span><span class="eyebrow">Physical plausibility</span></div>
+      <img src="assets/img/streams/motion.jpg" alt="Frame with arrows following patches to their match in the next frame" loading="lazy">
+      <div class="card-body">Each arrow follows a patch to its best match in the next frame. Real motion carries neighbors along together.</div>
+    </div>
+    <div class="card">
+      <div class="card-head"><span><span class="swatch" style="background:#2a78d6"></span>Semantic change</span><span class="eyebrow">Physical plausibility</span></div>
+      <img src="assets/img/streams/change.jpg?v=1792381466" alt="Two views of the same frame pair: raw pixel difference on the left, the model's semantic change map in blue on the right" loading="lazy">
+      <div class="card-body">Left: where raw pixels moved between two frames. Right: where the encoder's features changed unusually (blue). They are different things.</div>
     </div>
   </div>
+  <p class="caption">
+    <b>SEAM's four streams on one clip.</b> Eight frames of the clip (top), and what each stream reads from
+    them. Two streams look within a frame and two across frames; together they cover low-level artifacts,
+    learned representations and physical plausibility.
+  </p>
 </div>
 
 <!-- ============================ RESULTS ============================ -->
-<div class="container blog main" id="results">
+<div class="container blog main">
+  <h1 id="results">Trained on one generator, tested on thirty</h1>
   <p class="text">
     Every method here is trained on a single generator (Open-Sora, 2,000 clips per class) and then tested on
     19 unseen open-source and 11 unseen commercial generators. Published comparisons often put a small
@@ -165,41 +185,74 @@
     the next-best method. On commercial generators the methods are much closer, and differences of about 0.015
     AUC are within the seed-to-seed noise we measured, so we read that column as a tie.
   </p>
-  <div class="table-wrap flat"><table class="blocks"><thead><tr><th>Approach</th><th>Method</th><th>ID</th><th>OOD-C</th><th>OOD-F</th><th>MNW</th><th>MintVid</th></tr></thead><tbody>
-<tr class="shade"><td class="grp" rowspan="9">Baselines (retrained)</td><td class="">Linear probe (UFD)</td><td class="num">1.000</td><td class="num">0.858</td><td class="num">0.819</td><td class="num">0.728</td><td class="num">0.753</td></tr>
-<tr class=""><td class="">Full fine-tune</td><td class="num">1.000</td><td class="num">0.732</td><td class="num">0.821</td><td class="num">0.660</td><td class="num">0.624</td></tr>
-<tr class="shade"><td class="">RINE</td><td class="num">1.000</td><td class="num">0.816</td><td class="num">0.764</td><td class="num">0.645</td><td class="num">0.679</td></tr>
-<tr class=""><td class="">FatFormer</td><td class="num">1.000</td><td class="num">0.820</td><td class="num">0.850</td><td class="num">0.496</td><td class="num">0.555</td></tr>
-<tr class="shade"><td class="">C2P-CLIP</td><td class="num">1.000</td><td class="num">0.639</td><td class="num">0.622</td><td class="num">0.570</td><td class="num">0.532</td></tr>
-<tr class=""><td class="">DeMamba</td><td class="num">1.000</td><td class="num">0.858</td><td class="num">0.802</td><td class="num">0.728</td><td class="num">0.727</td></tr>
-<tr class="shade"><td class="">Human Action CLIPs</td><td class="num">1.000</td><td class="num">0.885</td><td class="num">0.844</td><td class="num">0.642</td><td class="num">0.769</td></tr>
-<tr class=""><td class="">Effort</td><td class="num">1.000</td><td class="num">0.824</td><td class="num">0.868</td><td class="num">0.786</td><td class="num">0.715</td></tr>
-<tr class="shade"><td class="">ForgeLens</td><td class="num">1.000</td><td class="num">0.826</td><td class="num">0.870</td><td class="num">0.755</td><td class="num">0.640</td></tr>
-<tr class="spacer"><td colspan="7"></td></tr>
-<tr class="shade ours"><td class="grp" rowspan="1">SEAM (ours)</td><td class="">SEAM, best configuration</td><td class="num">1.000</td><td class="num">0.923</td><td class="num">0.871</td><td class="num">0.804</td><td class="num">0.776</td></tr>
-</tbody></table></div>
-  <p class="caption"><b>AUC against state-of-the-art detectors.</b> Held-out Open-Sora (ID), 19 unseen open-source generators (OOD-C), 11 unseen commercial generators (OOD-F), in-the-wild clips from 2025-era commercial generators (MNW) and talking-head generation (MintVid). The SEAM row takes its better configuration per column.</p>
-      <p class="text">
-    <b>As for weaknesses, the biggest one is compression.</b> After H.264 re-encoding, SEAM's far-OOD AUC drops from -0.120 at CRF 23
-    to -0.271 at CRF 47. It holds up better than Effort at light compression but falls behind it from CRF 35,
-    and ForgeLens degrades less throughout. The frame-to-frame changes that its temporal streams read are what
-    compression corrupts.
-  </p>
-  <div class="table-wrap flat"><table class="blocks"><thead><tr><th></th><th>Method</th><th>Clean</th><th>&Delta; CRF 23</th><th>&Delta; 28</th><th>&Delta; 35</th><th>&Delta; 42</th><th>&Delta; 47</th></tr></thead><tbody>
-<tr class="shade"><td class="grp" rowspan="2">Baselines</td><td class="">Effort</td><td class="num">0.868</td><td class="num">-0.175</td><td class="num">-0.214</td><td class="num">-0.215</td><td class="num">-0.230</td><td class="num">-0.250</td></tr>
-<tr class=""><td class="">ForgeLens</td><td class="num">0.869</td><td class="num">-0.072</td><td class="num">-0.058</td><td class="num">-0.054</td><td class="num">-0.068</td><td class="num">-0.079</td></tr>
-<tr class="spacer"><td colspan="8"></td></tr>
-<tr class="shade ours"><td class="grp" rowspan="1">SEAM</td><td class="">SEAM (ours)</td><td class="num">0.871</td><td class="num">-0.120</td><td class="num">-0.200</td><td class="num">-0.244</td><td class="num">-0.264</td><td class="num">-0.271</td></tr>
-</tbody></table></div>
-  <p class="caption"><b>Compression resilience.</b> Change in OOD-F AUC after H.264 re-encoding at increasing CRF; closer to zero is better. The two strongest far-OOD baselines are shown.</p>
+</div>
 
+<div class="container blog main gray" style="padding-top:3vh; padding-bottom:2vh;">
+  <div class="table-wrap">
+    <table class="data">
+      <thead>
+        <tr><th>Method</th><th class="num">ID</th><th class="num">OOD-C</th><th class="num">OOD-F</th><th class="num">MNW</th><th class="num">MintVid</th></tr>
+      </thead>
+      <tbody>
+        <tr class="group"><td colspan="6">Baselines (retrained)</td></tr>
+        <tr><td>Linear probe (UFD)</td><td class="num">1.000</td><td class="num">0.858</td><td class="num">0.819</td><td class="num">0.728</td><td class="num">0.753</td></tr>
+        <tr><td>Full fine-tune</td><td class="num">1.000</td><td class="num">0.732</td><td class="num">0.821</td><td class="num">0.660</td><td class="num">0.624</td></tr>
+        <tr><td>RINE</td><td class="num">1.000</td><td class="num">0.816</td><td class="num">0.764</td><td class="num">0.645</td><td class="num">0.679</td></tr>
+        <tr><td>FatFormer</td><td class="num">1.000</td><td class="num">0.820</td><td class="num">0.850</td><td class="num">0.496</td><td class="num">0.555</td></tr>
+        <tr><td>C2P-CLIP</td><td class="num">1.000</td><td class="num">0.639</td><td class="num">0.622</td><td class="num">0.570</td><td class="num">0.532</td></tr>
+        <tr><td>DeMamba</td><td class="num">1.000</td><td class="num">0.858</td><td class="num">0.802</td><td class="num">0.728</td><td class="num">0.727</td></tr>
+        <tr><td>Human Action CLIPs</td><td class="num">1.000</td><td class="num">0.885</td><td class="num">0.844</td><td class="num">0.642</td><td class="num">0.769</td></tr>
+        <tr><td>Effort</td><td class="num">1.000</td><td class="num">0.824</td><td class="num">0.868</td><td class="num">0.786</td><td class="num">0.715</td></tr>
+        <tr><td>ForgeLens</td><td class="num">1.000</td><td class="num">0.826</td><td class="num">0.870</td><td class="num">0.755</td><td class="num">0.640</td></tr>
+        <tr class="group"><td colspan="6">Ours</td></tr>
+        <tr class="ours"><td>SEAM, best configuration</td><td class="num">1.000</td><td class="num">0.923</td><td class="num">0.871</td><td class="num">0.804</td><td class="num">0.776</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="caption">
+    <b>AUC against state-of-the-art detectors.</b> Held-out Open-Sora (ID), 19 unseen open-source generators
+    (OOD-C), 11 unseen commercial generators (OOD-F), in-the-wild clips from 2025-era commercial generators (MNW)
+    and talking-head generation (MintVid). The SEAM row takes its better configuration per column.
+  </p>
+</div>
+
+<div class="container blog main">
+  <p class="text">
+    <b>As for weaknesses, the biggest one is compression.</b> After H.264 re-encoding, SEAM's far-OOD AUC drops
+    by 0.120 at CRF 23 and by 0.271 at CRF 47. It holds up better than Effort at light compression but falls
+    behind it from CRF 35, and ForgeLens degrades less throughout. The frame-to-frame changes that its temporal
+    streams read are what compression corrupts.
+  </p>
+</div>
+
+<div class="container blog main gray" style="padding-top:3vh; padding-bottom:2vh;">
+  <div class="table-wrap">
+    <table class="data">
+      <thead>
+        <tr><th>Method</th><th class="num">Clean</th><th class="num">&Delta; CRF 23</th><th class="num">&Delta; 28</th><th class="num">&Delta; 35</th><th class="num">&Delta; 42</th><th class="num">&Delta; 47</th></tr>
+      </thead>
+      <tbody>
+        <tr class="group"><td colspan="7">Baselines</td></tr>
+        <tr><td>Effort</td><td class="num">0.868</td><td class="num">&minus;0.175</td><td class="num">&minus;0.214</td><td class="num">&minus;0.215</td><td class="num">&minus;0.230</td><td class="num">&minus;0.250</td></tr>
+        <tr><td>ForgeLens</td><td class="num">0.869</td><td class="num">&minus;0.072</td><td class="num">&minus;0.058</td><td class="num">&minus;0.054</td><td class="num">&minus;0.068</td><td class="num">&minus;0.079</td></tr>
+        <tr class="group"><td colspan="7">Ours</td></tr>
+        <tr class="ours"><td>SEAM</td><td class="num">0.871</td><td class="num">&minus;0.120</td><td class="num">&minus;0.200</td><td class="num">&minus;0.244</td><td class="num">&minus;0.264</td><td class="num">&minus;0.271</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="caption">
+    <b>Compression resilience.</b> Change in OOD-F AUC after H.264 re-encoding at increasing CRF; closer to zero
+    is better. The two strongest far-OOD baselines are shown.
+  </p>
 </div>
 
 <!-- ============================ SLOP ============================ -->
 <div class="container blog main">
   <h1 id="slop">Social media videos are wildly different from current deepfake detection benchmarks</h1>
   <p class="text">
-    Generally, dataset benchmarks for deepfake detection are too clean to represent content often found on social media. Social media videos tend to be cropped, captioned, filtered, recompressed, etc. SLOP collects AI-generated and real videos from Instagram, TikTok and X so we can test on that kind of footage.
+    Generally, dataset benchmarks for deepfake detection are too clean to represent content often found on
+    social media. Social media videos tend to be cropped, captioned, filtered, recompressed, etc. SLOP collects
+    AI-generated and real videos from Instagram, TikTok and X so we can test on that kind of footage.
   </p>
   <p class="text">
     <b>SLOP has 6,000 posts in a 50:50 split of real and AI-generated content,</b> balanced across Instagram,
@@ -212,46 +265,79 @@
     AI-persona accounts with a balanced, split-ready release.
   </p>
 </div>
-<div class="container blog large">
-  <div class="wide">
-  <div class="table-wrap flat"><table class="blocks"><thead><tr><th></th><th>Dataset</th><th>Year</th><th>Videos</th><th>In-the-wild</th><th>Social</th><th>AI-gen</th><th>Personas</th><th>Balanced</th><th>Splits</th></tr></thead><tbody>
-<tr class="shade"><td class="grp" rowspan="8">Prior</td><td class="">WildDeepfake</td><td class="num">2020</td><td class="num">707</td><td class="num">&#10003;</td><td class="num">&#10003;</td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num">&#10003;</td></tr>
-<tr class=""><td class="">DFDC</td><td class="num">2020</td><td class="num">128,154</td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num">&#10003;</td></tr>
-<tr class="shade"><td class="">DF40</td><td class="num">2024</td><td class="num">0.1M+</td><td class="num"></td><td class="num"></td><td class="num">~</td><td class="num"></td><td class="num">~</td><td class="num">&#10003;</td></tr>
-<tr class=""><td class="">GenVideo</td><td class="num">2024</td><td class="num">2.3M</td><td class="num"></td><td class="num"></td><td class="num">&#10003;</td><td class="num"></td><td class="num">~</td><td class="num">&#10003;</td></tr>
-<tr class="shade"><td class="">Deepfake-Eval-2024</td><td class="num">2024</td><td class="num">2,036</td><td class="num">&#10003;</td><td class="num">&#10003;</td><td class="num">~</td><td class="num"></td><td class="num"></td><td class="num"></td></tr>
-<tr class=""><td class="">DeepSpeak</td><td class="num">2026</td><td class="num">13,025</td><td class="num"></td><td class="num"></td><td class="num">~</td><td class="num"></td><td class="num">~</td><td class="num">&#10003;</td></tr>
-<tr class="shade"><td class="">DeepSpeak-Agentic</td><td class="num">2026</td><td class="num">200</td><td class="num"></td><td class="num"></td><td class="num">~</td><td class="num"></td><td class="num">&#10003;</td><td class="num"></td></tr>
-<tr class=""><td class="">MNW</td><td class="num">2026</td><td class="num">320</td><td class="num">&#10003;</td><td class="num">~</td><td class="num">&#10003;</td><td class="num"></td><td class="num"></td><td class="num"></td></tr>
-<tr class="spacer"><td colspan="10"></td></tr>
-<tr class="shade ours"><td class="grp" rowspan="1">Ours</td><td class="">SLOP</td><td class="num">2026</td><td class="num">6,000</td><td class="num">&#10003;</td><td class="num">&#10003;</td><td class="num">&#10003;</td><td class="num">&#10003;</td><td class="num">&#10003;</td><td class="num">&#10003;</td></tr>
-</tbody></table></div>
-  <p class="caption"><b>Dataset comparison.</b> In-the-wild: collected from circulating posts. Social: platform-native
-    processing. AI-gen: full-frame generation, as opposed to face manipulation. Personas: dedicated AI-persona
-    accounts. A tilde means partially. Sizes are video counts.</p>
+
+<div class="container blog large gray" style="padding-top:3vh; padding-bottom:2vh;">
+  <div class="table-wrap">
+    <table class="data">
+      <thead>
+        <tr><th>Dataset</th><th class="c">Year</th><th class="num">Videos</th><th class="c">In-the-wild</th><th class="c">Social</th><th class="c">AI-gen</th><th class="c">Personas</th><th class="c">Balanced</th><th class="c">Splits</th></tr>
+      </thead>
+      <tbody>
+        <tr class="group"><td colspan="9">Prior datasets</td></tr>
+        <tr><td>WildDeepfake</td><td class="c">2020</td><td class="num">707</td><td class="c">&#10003;</td><td class="c">&#10003;</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c">&#10003;</td></tr>
+        <tr><td>DFDC</td><td class="c">2020</td><td class="num">128,154</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c">&#10003;</td></tr>
+        <tr><td>DF40</td><td class="c">2024</td><td class="num">0.1M+</td><td class="c"></td><td class="c"></td><td class="c">~</td><td class="c"></td><td class="c">~</td><td class="c">&#10003;</td></tr>
+        <tr><td>GenVideo</td><td class="c">2024</td><td class="num">2.3M</td><td class="c"></td><td class="c"></td><td class="c">&#10003;</td><td class="c"></td><td class="c">~</td><td class="c">&#10003;</td></tr>
+        <tr><td>Deepfake-Eval-2024</td><td class="c">2024</td><td class="num">2,036</td><td class="c">&#10003;</td><td class="c">&#10003;</td><td class="c">~</td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+        <tr><td>DeepSpeak</td><td class="c">2026</td><td class="num">13,025</td><td class="c"></td><td class="c"></td><td class="c">~</td><td class="c"></td><td class="c">~</td><td class="c">&#10003;</td></tr>
+        <tr><td>DeepSpeak-Agentic</td><td class="c">2026</td><td class="num">200</td><td class="c"></td><td class="c"></td><td class="c">~</td><td class="c"></td><td class="c">&#10003;</td><td class="c"></td></tr>
+        <tr><td>MNW</td><td class="c">2026</td><td class="num">320</td><td class="c">&#10003;</td><td class="c">~</td><td class="c">&#10003;</td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+        <tr class="group"><td colspan="9">Ours</td></tr>
+        <tr class="ours"><td>SLOP</td><td class="c">2026</td><td class="num">6,000</td><td class="c">&#10003;</td><td class="c">&#10003;</td><td class="c">&#10003;</td><td class="c">&#10003;</td><td class="c">&#10003;</td><td class="c">&#10003;</td></tr>
+      </tbody>
+    </table>
   </div>
-</div>
-<div class="container blog main">
-  <p class="text">
-    To better understand our dataset as well as social media content in general, we created a taxonomy that sorts clips along three axes: style, format, and content. See examples of this below.
+  <p class="caption">
+    <b>Dataset comparison.</b> In-the-wild: collected from circulating posts. Social: platform-native
+    processing. AI-gen: full-frame generation, as opposed to face manipulation. Personas: dedicated AI-persona
+    accounts. A tilde means partially. Sizes are video counts.
   </p>
 </div>
-<div class="container blog large gray">
-  <div class="tabbed tab-scope"><div class="tabs" role="tablist"><button class="tab active" data-tab="tax-style">Style</button><button class="tab" data-tab="tax-format">Format</button><button class="tab" data-tab="tax-content">Content</button></div><div class="tab-body"><div class="tab-panel active" id="tax-style"><div class="tax-groups"><section class="tax-group g0"><h4>Animated</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="DUACETgiIQV"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/animated_0_0.jpg" data-src="assets/video/taxonomy/DUACETgiIQV.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill ai">AI</span><span class="plat">Instagram</span></div></div></div></div></section><section class="tax-group g1"><h4>Hyperrealistic</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="DJ6ftZySO5t"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/hyperrealistic_0_0.jpg" data-src="assets/video/taxonomy/DJ6ftZySO5t.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill ai">AI</span><span class="plat">Instagram</span></div></div></div><div class="tcard"><div class="clip" title="2091575078337069242_13_2091574809423413248"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/hyperrealistic_1_0.jpg" data-src="assets/video/taxonomy/2091575078337069242_13_2091574809423413248.mp4" style="--ar:1.7778" width="640" height="360"></video><div class="meta"><span class="pill ai">AI</span><span class="plat">X</span></div></div></div></div></section><section class="tax-group g2"><h4>Security camera</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="DQ2KDRJj-vC"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/cctv_0_0.jpg" data-src="assets/video/taxonomy/DQ2KDRJj-vC.mp4" style="--ar:0.5667" width="204" height="360"></video><div class="meta"><span class="pill ai">AI</span><span class="plat">Instagram</span></div></div></div></div></section><section class="tax-group g3"><h4>Screen recording</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="--7115163411952192814"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/screen_recording_0_0.jpg" data-src="assets/video/taxonomy/7115163411952192814.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">TikTok</span></div></div></div><div class="tcard"><div class="clip" title="7652870852861644045"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/screen_recording_1_0.jpg" data-src="assets/video/taxonomy/7652870852861644045.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">TikTok</span></div></div></div></div></section></div></div><div class="tab-panel" id="tax-format"><div class="tax-groups"><section class="tax-group g0"><h4>Talking head</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="--7082076757855112491"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/talking_head_0_0.jpg" data-src="assets/video/taxonomy/7082076757855112491.mp4" style="--ar:0.5111" width="184" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">TikTok</span></div></div></div><div class="tcard"><div class="clip" title="--7118891068103429382"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/talking_head_1_0.jpg" data-src="assets/video/taxonomy/7118891068103429382.mp4" style="--ar:0.5833" width="210" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">TikTok</span></div></div></div></div></section><section class="tax-group g1"><h4>Macro</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="1301605661530943"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/macro_0_0.jpg" data-src="assets/video/taxonomy/1301605661530943.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">Instagram</span></div></div></div></div></section><section class="tax-group g2"><h4>Full-form scene</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="7652109978047728909"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/full_form_scene_0_0.jpg" data-src="assets/video/taxonomy/7652109978047728909.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">TikTok</span></div></div></div><div class="tcard"><div class="clip" title="7652123522868841741"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/full_form_scene_1_0.jpg" data-src="assets/video/taxonomy/7652123522868841741.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">TikTok</span></div></div></div></div></section><section class="tax-group g3"><h4>Single object</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="1322314149921833"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/single_object_0_0.jpg" data-src="assets/video/taxonomy/1322314149921833.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">Instagram</span></div></div></div><div class="tcard"><div class="clip" title="1323821406383196"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/single_object_1_0.jpg" data-src="assets/video/taxonomy/1323821406383196.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">Instagram</span></div></div></div></div></section></div></div><div class="tab-panel" id="tax-content"><div class="tax-groups"><section class="tax-group g0"><h4>Nature</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="--7061140197622172933"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/nature_0_0.jpg" data-src="assets/video/taxonomy/7061140197622172933.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">TikTok</span></div></div></div><div class="tcard"><div class="clip" title="--7350702405748673825"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/nature_1_0.jpg" data-src="assets/video/taxonomy/7350702405748673825.mp4" style="--ar:0.7500" width="270" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">TikTok</span></div></div></div></div></section><section class="tax-group g1"><h4>Interview</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="--7152126391796993286"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/interview_0_0.jpg" data-src="assets/video/taxonomy/7152126391796993286.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">TikTok</span></div></div></div><div class="tcard"><div class="clip" title="--7508048315318062382"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/interview_1_0.jpg" data-src="assets/video/taxonomy/7508048315318062382.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">TikTok</span></div></div></div></div></section><section class="tax-group g2"><h4>News</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="--7599388065785728287"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/news_0_0.jpg" data-src="assets/video/taxonomy/7599388065785728287.mp4" style="--ar:1.7778" width="640" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">TikTok</span></div></div></div><div class="tcard"><div class="clip" title="--7413100736407719214"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/news_1_0.jpg" data-src="assets/video/taxonomy/7413100736407719214.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">TikTok</span></div></div></div></div></section><section class="tax-group g3"><h4>Pet / animal</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="DUR0v2eiK2L"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/pet_animal_0_0.jpg" data-src="assets/video/taxonomy/DUR0v2eiK2L.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill ai">AI</span><span class="plat">Instagram</span></div></div></div><div class="tcard"><div class="clip" title="--7115021141936196906"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/pet_animal_1_0.jpg" data-src="assets/video/taxonomy/7115021141936196906.mp4" style="--ar:1.0611" width="382" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">TikTok</span></div></div></div></div></section><section class="tax-group g4"><h4>Storytelling</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="DX_4kYMC1oy"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/storytelling_0_0.jpg" data-src="assets/video/taxonomy/DX_4kYMC1oy.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill ai">AI</span><span class="plat">Instagram</span></div></div></div><div class="tcard"><div class="clip" title="1938802720171181"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/storytelling_1_0.jpg" data-src="assets/video/taxonomy/1938802720171181.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">Instagram</span></div></div></div></div></section><section class="tax-group g5"><h4>Vlog</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="1679571500035458"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/vlog_0_0.jpg" data-src="assets/video/taxonomy/1679571500035458.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">Instagram</span></div></div></div><div class="tcard"><div class="clip" title="1697385174593576"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/vlog_1_0.jpg" data-src="assets/video/taxonomy/1697385174593576.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">Instagram</span></div></div></div></div></section><section class="tax-group g0"><h4>Found footage / handheld</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="1706307040798155"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/found_footage_handheld_0_0.jpg" data-src="assets/video/taxonomy/1706307040798155.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">Instagram</span></div></div></div><div class="tcard"><div class="clip" title="1719507442395458"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/found_footage_handheld_1_0.jpg" data-src="assets/video/taxonomy/1719507442395458.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">Instagram</span></div></div></div></div></section><section class="tax-group g1"><h4>Advertisement</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="DSLWvnyk0qp"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/advertisement_0_0.jpg" data-src="assets/video/taxonomy/DSLWvnyk0qp.mp4" style="--ar:1.8167" width="654" height="360"></video><div class="meta"><span class="pill ai">AI</span><span class="plat">Instagram</span></div></div></div><div class="tcard"><div class="clip" title="DQT_t5ADM1m"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/advertisement_1_0.jpg" data-src="assets/video/taxonomy/DQT_t5ADM1m.mp4" style="--ar:1.8167" width="654" height="360"></video><div class="meta"><span class="pill ai">AI</span><span class="plat">Instagram</span></div></div></div></div></section></div></div></div></div>
-</div>
+
 <div class="container blog main">
   <p class="text">
-    Trained on the SLOP train
-    split and tested on its creator-disjoint test split, SEAM reaches 0.961 AP and 0.957 AUROC, ahead of Effort
-    and ForgeLens.
+    To better understand our dataset as well as social media content in general, we created a taxonomy that
+    sorts clips along three axes: style, format, and content. See examples of this below.
   </p>
-  <div class="table-wrap flat"><table class="blocks"><thead><tr><th>Setting</th><th>Method</th><th>AP</th><th>AUROC</th></tr></thead><tbody>
-<tr class="shade ours"><td class="grp" rowspan="3">Trained and tested on SLOP</td><td class="">SEAM (ours)</td><td class="num"><b>0.961</b></td><td class="num"><b>0.957</b></td></tr>
-<tr class=""><td class="">Effort</td><td class="num">0.956</td><td class="num">0.954</td></tr>
-<tr class="shade"><td class="">ForgeLens</td><td class="num">0.929</td><td class="num">0.929</td></tr>
-</tbody></table></div>
-  <p class="caption"><b>In-domain performance on SLOP.</b> Trained on the train split, evaluated on the
-    creator-disjoint test split. AP: average precision. The two strongest far-OOD baselines are shown.</p>
+</div>
+
+<div class="container blog large gray" style="padding-top:3vh; padding-bottom:1.5vh;">
+  <div class="tab-body tab-scope"><div class="tabs" role="tablist" aria-label="Taxonomy axis"><button type="button" role="tab" aria-selected="true" class="tab active" data-tab="tax-style">Style</button><button type="button" role="tab" aria-selected="false" class="tab" data-tab="tax-format">Format</button><button type="button" role="tab" aria-selected="false" class="tab" data-tab="tax-content">Content</button></div><div class="tab-panel active" id="tax-style"><div class="tax-groups"><section class="tax-group g0"><h4>Animated</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="DUACETgiIQV"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/animated_0_0.jpg" data-src="assets/video/taxonomy/DUACETgiIQV.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill ai">AI</span><span class="plat">Instagram</span></div></div></div></div></section><section class="tax-group g1"><h4>Hyperrealistic</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="DJ6ftZySO5t"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/hyperrealistic_0_0.jpg" data-src="assets/video/taxonomy/DJ6ftZySO5t.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill ai">AI</span><span class="plat">Instagram</span></div></div></div><div class="tcard"><div class="clip" title="2091575078337069242_13_2091574809423413248"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/hyperrealistic_1_0.jpg" data-src="assets/video/taxonomy/2091575078337069242_13_2091574809423413248.mp4" style="--ar:1.7778" width="640" height="360"></video><div class="meta"><span class="pill ai">AI</span><span class="plat">X</span></div></div></div></div></section><section class="tax-group g2"><h4>Security camera</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="DQ2KDRJj-vC"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/cctv_0_0.jpg" data-src="assets/video/taxonomy/DQ2KDRJj-vC.mp4" style="--ar:0.5667" width="204" height="360"></video><div class="meta"><span class="pill ai">AI</span><span class="plat">Instagram</span></div></div></div></div></section><section class="tax-group g3"><h4>Screen recording</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="--7115163411952192814"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/screen_recording_0_0.jpg" data-src="assets/video/taxonomy/7115163411952192814.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">TikTok</span></div></div></div><div class="tcard"><div class="clip" title="7652870852861644045"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/screen_recording_1_0.jpg" data-src="assets/video/taxonomy/7652870852861644045.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">TikTok</span></div></div></div></div></section></div></div><div class="tab-panel" id="tax-format"><div class="tax-groups"><section class="tax-group g0"><h4>Talking head</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="--7082076757855112491"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/talking_head_0_0.jpg" data-src="assets/video/taxonomy/7082076757855112491.mp4" style="--ar:0.5111" width="184" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">TikTok</span></div></div></div><div class="tcard"><div class="clip" title="--7118891068103429382"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/talking_head_1_0.jpg" data-src="assets/video/taxonomy/7118891068103429382.mp4" style="--ar:0.5833" width="210" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">TikTok</span></div></div></div></div></section><section class="tax-group g1"><h4>Macro</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="1301605661530943"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/macro_0_0.jpg" data-src="assets/video/taxonomy/1301605661530943.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">Instagram</span></div></div></div></div></section><section class="tax-group g2"><h4>Full-form scene</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="7652109978047728909"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/full_form_scene_0_0.jpg" data-src="assets/video/taxonomy/7652109978047728909.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">TikTok</span></div></div></div><div class="tcard"><div class="clip" title="7652123522868841741"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/full_form_scene_1_0.jpg" data-src="assets/video/taxonomy/7652123522868841741.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">TikTok</span></div></div></div></div></section><section class="tax-group g3"><h4>Single object</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="1322314149921833"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/single_object_0_0.jpg" data-src="assets/video/taxonomy/1322314149921833.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">Instagram</span></div></div></div><div class="tcard"><div class="clip" title="1323821406383196"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/single_object_1_0.jpg" data-src="assets/video/taxonomy/1323821406383196.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">Instagram</span></div></div></div></div></section></div></div><div class="tab-panel" id="tax-content"><div class="tax-groups"><section class="tax-group g0"><h4>Nature</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="--7061140197622172933"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/nature_0_0.jpg" data-src="assets/video/taxonomy/7061140197622172933.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">TikTok</span></div></div></div><div class="tcard"><div class="clip" title="--7350702405748673825"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/nature_1_0.jpg" data-src="assets/video/taxonomy/7350702405748673825.mp4" style="--ar:0.7500" width="270" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">TikTok</span></div></div></div></div></section><section class="tax-group g1"><h4>Interview</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="--7152126391796993286"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/interview_0_0.jpg" data-src="assets/video/taxonomy/7152126391796993286.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">TikTok</span></div></div></div><div class="tcard"><div class="clip" title="--7508048315318062382"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/interview_1_0.jpg" data-src="assets/video/taxonomy/7508048315318062382.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">TikTok</span></div></div></div></div></section><section class="tax-group g2"><h4>News</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="--7599388065785728287"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/news_0_0.jpg" data-src="assets/video/taxonomy/7599388065785728287.mp4" style="--ar:1.7778" width="640" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">TikTok</span></div></div></div><div class="tcard"><div class="clip" title="--7413100736407719214"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/news_1_0.jpg" data-src="assets/video/taxonomy/7413100736407719214.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">TikTok</span></div></div></div></div></section><section class="tax-group g3"><h4>Pet / animal</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="DUR0v2eiK2L"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/pet_animal_0_0.jpg" data-src="assets/video/taxonomy/DUR0v2eiK2L.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill ai">AI</span><span class="plat">Instagram</span></div></div></div><div class="tcard"><div class="clip" title="--7115021141936196906"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/pet_animal_1_0.jpg" data-src="assets/video/taxonomy/7115021141936196906.mp4" style="--ar:1.0611" width="382" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">TikTok</span></div></div></div></div></section><section class="tax-group g4"><h4>Storytelling</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="DX_4kYMC1oy"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/storytelling_0_0.jpg" data-src="assets/video/taxonomy/DX_4kYMC1oy.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill ai">AI</span><span class="plat">Instagram</span></div></div></div><div class="tcard"><div class="clip" title="1938802720171181"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/storytelling_1_0.jpg" data-src="assets/video/taxonomy/1938802720171181.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">Instagram</span></div></div></div></div></section><section class="tax-group g5"><h4>Vlog</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="1679571500035458"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/vlog_0_0.jpg" data-src="assets/video/taxonomy/1679571500035458.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">Instagram</span></div></div></div><div class="tcard"><div class="clip" title="1697385174593576"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/vlog_1_0.jpg" data-src="assets/video/taxonomy/1697385174593576.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">Instagram</span></div></div></div></div></section><section class="tax-group g0"><h4>Found footage / handheld</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="1706307040798155"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/found_footage_handheld_0_0.jpg" data-src="assets/video/taxonomy/1706307040798155.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">Instagram</span></div></div></div><div class="tcard"><div class="clip" title="1719507442395458"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/found_footage_handheld_1_0.jpg" data-src="assets/video/taxonomy/1719507442395458.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="meta"><span class="pill real">Real</span><span class="plat">Instagram</span></div></div></div></div></section><section class="tax-group g1"><h4>Advertisement</h4><div class="tax-cards"><div class="tcard"><div class="clip" title="DSLWvnyk0qp"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/advertisement_0_0.jpg" data-src="assets/video/taxonomy/DSLWvnyk0qp.mp4" style="--ar:1.8167" width="654" height="360"></video><div class="meta"><span class="pill ai">AI</span><span class="plat">Instagram</span></div></div></div><div class="tcard"><div class="clip" title="DQT_t5ADM1m"><video class="tvid" muted loop playsinline preload="none" poster="assets/img/taxonomy/advertisement_1_0.jpg" data-src="assets/video/taxonomy/DQT_t5ADM1m.mp4" style="--ar:1.8167" width="654" height="360"></video><div class="meta"><span class="pill ai">AI</span><span class="plat">Instagram</span></div></div></div></div></section></div></div></div>
+  <p class="caption">
+    <b>The SLOP taxonomy.</b> Example clips for each category along the three axes. Each card shows whether
+    the clip is AI-generated or real, and the platform it was posted on.
+  </p>
+</div>
+
+<div class="container blog main">
+  <p class="text">
+    Trained on the SLOP train split and tested on its creator-disjoint test split, SEAM reaches 0.961 AP and
+    0.957 AUROC, ahead of Effort and ForgeLens.
+  </p>
+</div>
+
+<div class="container blog main gray" style="padding-top:3vh; padding-bottom:2vh;">
+  <div class="table-wrap" style="max-width:70%; margin:0 auto;">
+    <table class="data">
+      <thead>
+        <tr><th>Method</th><th class="num">AP</th><th class="num">AUROC</th></tr>
+      </thead>
+      <tbody>
+        <tr class="group"><td colspan="3">Baselines</td></tr>
+        <tr><td>Effort</td><td class="num">0.956</td><td class="num">0.954</td></tr>
+        <tr><td>ForgeLens</td><td class="num">0.929</td><td class="num">0.929</td></tr>
+        <tr class="group"><td colspan="3">Ours</td></tr>
+        <tr class="ours"><td>SEAM</td><td class="num">0.961</td><td class="num">0.957</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="caption" style="max-width:70%; margin:1.4vh auto 0 auto;">
+    <b>In-domain performance on SLOP.</b> Trained on the train split, evaluated on the creator-disjoint test
+    split. AP: average precision. The two strongest far-OOD baselines are shown.
+  </p>
+</div>
+
+<div class="container blog main">
   <p class="text">
     <b>Re-fitting the densities and the small head recovers SLOP.</b> SEAM trained on AIGVDBench scores only 0.569
     on SLOP, and re-fitting the densities and head on SLOP's train split lifts that to 0.957 without touching the
@@ -259,33 +345,45 @@
     ForgeLens), and the best single transfer cell is 0.904, a MintVid-trained model evaluated on AIGVDBench. All
     three methods score low on VRT (0.49 to 0.63), whose real class is ASMR only.
   </p>
-  <div class="table-wrap flat"><table class="blocks"><thead><tr><th>Method</th><th>Trained on</th><th>AIGVD</th><th>SM</th><th>MintVid</th><th>MNW</th><th>VRT</th></tr></thead><tbody>
-<tr class="shade"><td class="grp" rowspan="3">SEAM (ours)</td><td class="">AIGVD</td><td class="num">0.813</td><td class="num">0.569</td><td class="num">0.779</td><td class="num">0.721</td><td class="num">0.574</td></tr>
-<tr class=""><td class="">SM</td><td class="num">0.894</td><td class="num"><b>0.957</b></td><td class="num">0.714</td><td class="num"><b>0.878</b></td><td class="num">0.568</td></tr>
-<tr class="shade"><td class="">MintVid</td><td class="num"><b>0.904</b></td><td class="num">0.807</td><td class="num"><b>0.952</b></td><td class="num">0.818</td><td class="num">0.590</td></tr>
-<tr class="spacer"><td colspan="7"></td></tr>
-<tr class="shade"><td class="grp" rowspan="3">Effort</td><td class="">AIGVD</td><td class="num">0.868</td><td class="num">0.609</td><td class="num">0.702</td><td class="num">0.786</td><td class="num">0.546</td></tr>
-<tr class=""><td class="">SM</td><td class="num">0.853</td><td class="num">0.954</td><td class="num">0.642</td><td class="num">0.743</td><td class="num"><b>0.628</b></td></tr>
-<tr class="shade"><td class="">MintVid</td><td class="num">0.809</td><td class="num">0.781</td><td class="num">0.948</td><td class="num">0.740</td><td class="num">0.517</td></tr>
-<tr class="spacer"><td colspan="7"></td></tr>
-<tr class="shade"><td class="grp" rowspan="3">ForgeLens</td><td class="">AIGVD</td><td class="num">0.869</td><td class="num">0.851</td><td class="num">0.626</td><td class="num">0.755</td><td class="num">0.550</td></tr>
-<tr class=""><td class="">SM</td><td class="num">0.711</td><td class="num">0.929</td><td class="num">0.624</td><td class="num">0.649</td><td class="num">0.492</td></tr>
-<tr class="shade"><td class="">MintVid</td><td class="num">0.869</td><td class="num">0.817</td><td class="num">0.768</td><td class="num">0.703</td><td class="num">0.543</td></tr>
-</tbody></table></div>
-  <p class="caption"><b>Cross-training generalization.</b> Each method is trained on one dataset (rows) and
-    evaluated on five test sets. MNW and VRT are evaluation-only. SM is SLOP. The two strongest far-OOD baselines
-    are shown.</p>
 </div>
 
+<div class="container blog main gray" style="padding-top:3vh; padding-bottom:2vh;">
+  <div class="table-wrap">
+    <table class="data">
+      <thead>
+        <tr><th>Trained on</th><th class="num">AIGVD</th><th class="num">SM</th><th class="num">MintVid</th><th class="num">MNW</th><th class="num">VRT</th></tr>
+      </thead>
+      <tbody>
+        <tr class="group"><td colspan="6">Effort</td></tr>
+        <tr><td>AIGVD</td><td class="num">0.868</td><td class="num">0.609</td><td class="num">0.702</td><td class="num">0.786</td><td class="num">0.546</td></tr>
+        <tr><td>SM</td><td class="num">0.853</td><td class="num">0.954</td><td class="num">0.642</td><td class="num">0.743</td><td class="num"><b>0.628</b></td></tr>
+        <tr><td>MintVid</td><td class="num">0.809</td><td class="num">0.781</td><td class="num">0.948</td><td class="num">0.740</td><td class="num">0.517</td></tr>
+        <tr class="group"><td colspan="6">ForgeLens</td></tr>
+        <tr><td>AIGVD</td><td class="num">0.869</td><td class="num">0.851</td><td class="num">0.626</td><td class="num">0.755</td><td class="num">0.550</td></tr>
+        <tr><td>SM</td><td class="num">0.711</td><td class="num">0.929</td><td class="num">0.624</td><td class="num">0.649</td><td class="num">0.492</td></tr>
+        <tr><td>MintVid</td><td class="num">0.869</td><td class="num">0.817</td><td class="num">0.768</td><td class="num">0.703</td><td class="num">0.543</td></tr>
+        <tr class="group"><td colspan="6">SEAM (ours)</td></tr>
+        <tr class="ours soft"><td>AIGVD</td><td class="num">0.813</td><td class="num">0.569</td><td class="num">0.779</td><td class="num">0.721</td><td class="num">0.574</td></tr>
+        <tr class="ours soft"><td>SM</td><td class="num">0.894</td><td class="num"><b>0.957</b></td><td class="num">0.714</td><td class="num"><b>0.878</b></td><td class="num">0.568</td></tr>
+        <tr class="ours soft"><td>MintVid</td><td class="num"><b>0.904</b></td><td class="num">0.807</td><td class="num"><b>0.952</b></td><td class="num">0.818</td><td class="num">0.590</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="caption">
+    <b>Cross-training generalization.</b> Each method is trained on one dataset (rows) and evaluated on five
+    test sets (columns); bold marks the best score in each column. MNW and VRT are evaluation-only. SM is SLOP.
+    The two strongest far-OOD baselines are shown.
+  </p>
+</div>
 
 <!-- ============================ FAILURES ============================ -->
 <div class="container blog main">
   <h1 id="failures">Misclassifications made by SEAM</h1>
   <p class="text">
-    <b>SEAM tends to miss more AI-generated content than infer real content to be AI.</b> On SLOP, 72% of the errors are AI clips
-    predicted as real, and the errors are spread roughly evenly across platforms (39% X, 30% Instagram, 31%
-    TikTok). On AIGVDBench the errors concentrate in the unseen-generator conditions, with LTX and EasyAnimate the
-    largest sources of missed fakes.
+    <b>SEAM tends to miss more AI-generated content than infer real content to be AI.</b> On SLOP, 72% of the
+    errors are AI clips predicted as real, and the errors are spread roughly evenly across platforms (39% X, 30%
+    Instagram, 31% TikTok). On AIGVDBench the errors concentrate in the unseen-generator conditions, with LTX and
+    EasyAnimate the largest sources of missed fakes.
   </p>
   <p class="text">
     We then went through the SLOP clips that a SEAM trained on SLOP gets wrong, using the operating threshold
@@ -295,24 +393,30 @@
   </p>
   <p class="text">
     <b>Real flagged as AI.</b> These include many clips from a single polished pet-influencer account, plus
-    heavily edited footage: glitch and particle effects, template overlays. The gallery shows at most three clips per account.
+    heavily edited footage: glitch and particle effects, template overlays. The gallery shows at most three clips
+    per account.
   </p>
   <p class="text">
     <b>AI passed as real.</b> Many are photoreal vertical talking-head or street-interview clips, several
-    featuring the same recurring AI persona. The gallery shows at most three clips per account; that persona account alone makes up 28 of the 73 misses.
+    featuring the same recurring AI persona. The gallery shows at most three clips per account; that persona
+    account alone makes up 28 of the 73 misses.
   </p>
   <p class="text">
-    These errors may be caused by the model keying on how polished a video looks rather than on whether a camera captured it.
+    These errors may be caused by the model keying on how polished a video looks rather than on whether a camera
+    captured it.
   </p>
 </div>
-<div class="container blog large gray">
-  <div class="tabbed tab-scope"><div class="tabs" role="tablist"><button class="tab active" data-tab="fail-false_positives">Real clips flagged as AI (8)</button><button class="tab" data-tab="fail-false_negatives">AI clips passed as real (13)</button></div><div class="tab-body"><div class="tab-panel active" id="fail-false_positives"><div class="clips grid"><div class="fcard" title="CKBXSecFFWH"><div class="fhead"><span class="ftitle">Real clip</span><span class="fbadge">1.00</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fp2_0.jpg" data-src="assets/video/failures/CKBXSecFFWH.mp4" style="--ar:1.7722" width="638" height="360"></video><div class="fchips"><span class="fchip bad">Flagged as AI</span><span class="fchip">Instagram</span><span class="fchip">train</span></div></div><div class="fcard" title="1360427319467794"><div class="fhead"><span class="ftitle">Real clip</span><span class="fbadge">1.00</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fp2_1.jpg" data-src="assets/video/failures/1360427319467794.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="fchips"><span class="fchip bad">Flagged as AI</span><span class="fchip">Instagram</span><span class="fchip">test</span></div></div><div class="fcard" title="CRn6s5JFYgC"><div class="fhead"><span class="ftitle">Real clip</span><span class="fbadge">1.00</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fp2_2.jpg" data-src="assets/video/failures/CRn6s5JFYgC.mp4" style="--ar:1.0000" width="360" height="360"></video><div class="fchips"><span class="fchip bad">Flagged as AI</span><span class="fchip">Instagram</span><span class="fchip">train</span></div></div><div class="fcard" title="--7172753733250567467"><div class="fhead"><span class="ftitle">Real clip</span><span class="fbadge">1.00</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fp2_3.jpg" data-src="assets/video/failures/--7172753733250567467.mp4" style="--ar:1.7778" width="640" height="360"></video><div class="fchips"><span class="fchip bad">Flagged as AI</span><span class="fchip">TikTok</span><span class="fchip">train</span></div></div><div class="fcard" title="CRD3l7elHo1"><div class="fhead"><span class="ftitle">Real clip</span><span class="fbadge">1.00</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fp2_4.jpg" data-src="assets/video/failures/CRD3l7elHo1.mp4" style="--ar:0.8000" width="288" height="360"></video><div class="fchips"><span class="fchip bad">Flagged as AI</span><span class="fchip">Instagram</span><span class="fchip">train</span></div></div><div class="fcard" title="--7315835879577161006"><div class="fhead"><span class="ftitle">Real clip</span><span class="fbadge">1.00</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fp2_5.jpg" data-src="assets/video/failures/--7315835879577161006.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="fchips"><span class="fchip bad">Flagged as AI</span><span class="fchip">TikTok</span><span class="fchip">train</span></div></div><div class="fcard" title="--7167664927094754562"><div class="fhead"><span class="ftitle">Real clip</span><span class="fbadge">1.00</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fp2_6.jpg" data-src="assets/video/failures/--7167664927094754562.mp4" style="--ar:1.7778" width="640" height="360"></video><div class="fchips"><span class="fchip bad">Flagged as AI</span><span class="fchip">TikTok</span><span class="fchip">train</span></div></div><div class="fcard" title="2533429910425575"><div class="fhead"><span class="ftitle">Real clip</span><span class="fbadge">0.99</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fp2_7.jpg" data-src="assets/video/failures/2533429910425575.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="fchips"><span class="fchip bad">Flagged as AI</span><span class="fchip">Instagram</span><span class="fchip">test</span></div></div></div><button class="show-more" data-target="fail-false_positives">Show all 8</button></div><div class="tab-panel" id="fail-false_negatives"><div class="clips grid"><div class="fcard" title="7678427916455234846"><div class="fhead"><span class="ftitle">AI clip</span><span class="fbadge">0.00</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fn2_0.jpg" data-src="assets/video/failures/7678427916455234846.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="fchips"><span class="fchip bad">Passed as real</span><span class="fchip">TikTok</span><span class="fchip">train</span></div></div><div class="fcard" title="7676910567575096607"><div class="fhead"><span class="ftitle">AI clip</span><span class="fbadge">0.00</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fn2_1.jpg" data-src="assets/video/failures/7676910567575096607.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="fchips"><span class="fchip bad">Passed as real</span><span class="fchip">TikTok</span><span class="fchip">train</span></div></div><div class="fcard" title="7681030566099127582"><div class="fhead"><span class="ftitle">AI clip</span><span class="fbadge">0.00</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fn2_2.jpg" data-src="assets/video/failures/7681030566099127582.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="fchips"><span class="fchip bad">Passed as real</span><span class="fchip">TikTok</span><span class="fchip">train</span></div></div><div class="fcard" title="2090348819699433951_13_2090348051487502337"><div class="fhead"><span class="ftitle">AI clip</span><span class="fbadge">0.00</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fn2_3.jpg" data-src="assets/video/failures/2090348819699433951_13_2090348051487502337.mp4" style="--ar:1.7833" width="642" height="360"></video><div class="fchips"><span class="fchip bad">Passed as real</span><span class="fchip">X</span><span class="fchip">train</span></div></div><div class="fcard" title="2092931090646274110_13_2092930931011002368"><div class="fhead"><span class="ftitle">AI clip</span><span class="fbadge">0.00</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fn2_4.jpg" data-src="assets/video/failures/2092931090646274110_13_2092930931011002368.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="fchips"><span class="fchip bad">Passed as real</span><span class="fchip">X</span><span class="fchip">train</span></div></div><div class="fcard" title="2090507963324649973_13_2090507886321455104"><div class="fhead"><span class="ftitle">AI clip</span><span class="fbadge">0.01</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fn2_5.jpg" data-src="assets/video/failures/2090507963324649973_13_2090507886321455104.mp4" style="--ar:1.6944" width="610" height="360"></video><div class="fchips"><span class="fchip bad">Passed as real</span><span class="fchip">X</span><span class="fchip">train</span></div></div><div class="fcard" title="2093132844918886482_13_2093132808558407680"><div class="fhead"><span class="ftitle">AI clip</span><span class="fbadge">0.01</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fn2_6.jpg" data-src="assets/video/failures/2093132844918886482_13_2093132808558407680.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="fchips"><span class="fchip bad">Passed as real</span><span class="fchip">X</span><span class="fchip">train</span></div></div><div class="fcard" title="DXr51m1gTid"><div class="fhead"><span class="ftitle">AI clip</span><span class="fbadge">0.08</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fn2_7.jpg" data-src="assets/video/failures/DXr51m1gTid.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="fchips"><span class="fchip bad">Passed as real</span><span class="fchip">Instagram</span><span class="fchip">test</span></div></div><div class="fcard" title="DQ0CoQ9kel5"><div class="fhead"><span class="ftitle">AI clip</span><span class="fbadge">0.39</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fn2_8.jpg" data-src="assets/video/failures/DQ0CoQ9kel5.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="fchips"><span class="fchip bad">Passed as real</span><span class="fchip">Instagram</span><span class="fchip">train</span></div></div><div class="fcard" title="2091123681812516924_13_2091116868664741889"><div class="fhead"><span class="ftitle">AI clip</span><span class="fbadge">0.41</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fn2_9.jpg" data-src="assets/video/failures/2091123681812516924_13_2091116868664741889.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="fchips"><span class="fchip bad">Passed as real</span><span class="fchip">X</span><span class="fchip">train</span></div></div><div class="fcard" title="DVKRmHJAW46"><div class="fhead"><span class="ftitle">AI clip</span><span class="fbadge">0.81</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fn2_10.jpg" data-src="assets/video/failures/DVKRmHJAW46.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="fchips"><span class="fchip bad">Passed as real</span><span class="fchip">Instagram</span><span class="fchip">train</span></div></div><div class="fcard" title="2093108723568816367_13_2093108660721344512"><div class="fhead"><span class="ftitle">AI clip</span><span class="fbadge">0.82</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fn2_11.jpg" data-src="assets/video/failures/2093108723568816367_13_2093108660721344512.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="fchips"><span class="fchip bad">Passed as real</span><span class="fchip">X</span><span class="fchip">train</span></div></div><div class="fcard" title="2092267189898289228_13_2092264350870331392"><div class="fhead"><span class="ftitle">AI clip</span><span class="fbadge">0.95</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fn2_12.jpg" data-src="assets/video/failures/2092267189898289228_13_2092264350870331392.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="fchips"><span class="fchip bad">Passed as real</span><span class="fchip">X</span><span class="fchip">train</span></div></div></div><button class="show-more" data-target="fail-false_negatives">Show all 13</button></div></div></div>
-  <p class="caption"><b>SEAM errors on SLOP.</b> Each card shows the ground-truth label, model score, platform and data split.</p>
+
+<div class="container blog large gray" style="padding-top:3vh; padding-bottom:1.5vh;">
+  <div class="tab-body tab-scope"><div class="tabs" role="tablist" aria-label="Error type"><button type="button" role="tab" aria-selected="true" class="tab active" data-tab="fail-false_positives">Flagged as AI (8)</button><button type="button" role="tab" aria-selected="false" class="tab" data-tab="fail-false_negatives">Passed as real (13)</button></div><div class="tab-panel active" id="fail-false_positives"><div class="clips grid"><div class="fcard" title="CKBXSecFFWH"><div class="fhead"><span class="ftitle">Real clip</span><span class="fbadge">1.00</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fp2_0.jpg" data-src="assets/video/failures/CKBXSecFFWH.mp4" style="--ar:1.7722" width="638" height="360"></video><div class="fchips"><span class="fchip bad">Flagged as AI</span><span class="fchip">Instagram</span><span class="fchip">train</span></div></div><div class="fcard" title="1360427319467794"><div class="fhead"><span class="ftitle">Real clip</span><span class="fbadge">1.00</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fp2_1.jpg" data-src="assets/video/failures/1360427319467794.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="fchips"><span class="fchip bad">Flagged as AI</span><span class="fchip">Instagram</span><span class="fchip">test</span></div></div><div class="fcard" title="CRn6s5JFYgC"><div class="fhead"><span class="ftitle">Real clip</span><span class="fbadge">1.00</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fp2_2.jpg" data-src="assets/video/failures/CRn6s5JFYgC.mp4" style="--ar:1.0000" width="360" height="360"></video><div class="fchips"><span class="fchip bad">Flagged as AI</span><span class="fchip">Instagram</span><span class="fchip">train</span></div></div><div class="fcard" title="--7172753733250567467"><div class="fhead"><span class="ftitle">Real clip</span><span class="fbadge">1.00</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fp2_3.jpg" data-src="assets/video/failures/--7172753733250567467.mp4" style="--ar:1.7778" width="640" height="360"></video><div class="fchips"><span class="fchip bad">Flagged as AI</span><span class="fchip">TikTok</span><span class="fchip">train</span></div></div><div class="fcard" title="CRD3l7elHo1"><div class="fhead"><span class="ftitle">Real clip</span><span class="fbadge">1.00</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fp2_4.jpg" data-src="assets/video/failures/CRD3l7elHo1.mp4" style="--ar:0.8000" width="288" height="360"></video><div class="fchips"><span class="fchip bad">Flagged as AI</span><span class="fchip">Instagram</span><span class="fchip">train</span></div></div><div class="fcard" title="--7315835879577161006"><div class="fhead"><span class="ftitle">Real clip</span><span class="fbadge">1.00</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fp2_5.jpg" data-src="assets/video/failures/--7315835879577161006.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="fchips"><span class="fchip bad">Flagged as AI</span><span class="fchip">TikTok</span><span class="fchip">train</span></div></div><div class="fcard" title="--7167664927094754562"><div class="fhead"><span class="ftitle">Real clip</span><span class="fbadge">1.00</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fp2_6.jpg" data-src="assets/video/failures/--7167664927094754562.mp4" style="--ar:1.7778" width="640" height="360"></video><div class="fchips"><span class="fchip bad">Flagged as AI</span><span class="fchip">TikTok</span><span class="fchip">train</span></div></div><div class="fcard" title="2533429910425575"><div class="fhead"><span class="ftitle">Real clip</span><span class="fbadge">0.99</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fp2_7.jpg" data-src="assets/video/failures/2533429910425575.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="fchips"><span class="fchip bad">Flagged as AI</span><span class="fchip">Instagram</span><span class="fchip">test</span></div></div></div></div><div class="tab-panel" id="fail-false_negatives"><div class="clips grid"><div class="fcard" title="7678427916455234846"><div class="fhead"><span class="ftitle">AI clip</span><span class="fbadge">0.00</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fn2_0.jpg" data-src="assets/video/failures/7678427916455234846.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="fchips"><span class="fchip bad">Passed as real</span><span class="fchip">TikTok</span><span class="fchip">train</span></div></div><div class="fcard" title="7676910567575096607"><div class="fhead"><span class="ftitle">AI clip</span><span class="fbadge">0.00</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fn2_1.jpg" data-src="assets/video/failures/7676910567575096607.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="fchips"><span class="fchip bad">Passed as real</span><span class="fchip">TikTok</span><span class="fchip">train</span></div></div><div class="fcard" title="7681030566099127582"><div class="fhead"><span class="ftitle">AI clip</span><span class="fbadge">0.00</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fn2_2.jpg" data-src="assets/video/failures/7681030566099127582.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="fchips"><span class="fchip bad">Passed as real</span><span class="fchip">TikTok</span><span class="fchip">train</span></div></div><div class="fcard" title="2090348819699433951_13_2090348051487502337"><div class="fhead"><span class="ftitle">AI clip</span><span class="fbadge">0.00</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fn2_3.jpg" data-src="assets/video/failures/2090348819699433951_13_2090348051487502337.mp4" style="--ar:1.7833" width="642" height="360"></video><div class="fchips"><span class="fchip bad">Passed as real</span><span class="fchip">X</span><span class="fchip">train</span></div></div><div class="fcard" title="2092931090646274110_13_2092930931011002368"><div class="fhead"><span class="ftitle">AI clip</span><span class="fbadge">0.00</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fn2_4.jpg" data-src="assets/video/failures/2092931090646274110_13_2092930931011002368.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="fchips"><span class="fchip bad">Passed as real</span><span class="fchip">X</span><span class="fchip">train</span></div></div><div class="fcard" title="2090507963324649973_13_2090507886321455104"><div class="fhead"><span class="ftitle">AI clip</span><span class="fbadge">0.01</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fn2_5.jpg" data-src="assets/video/failures/2090507963324649973_13_2090507886321455104.mp4" style="--ar:1.6944" width="610" height="360"></video><div class="fchips"><span class="fchip bad">Passed as real</span><span class="fchip">X</span><span class="fchip">train</span></div></div><div class="fcard" title="2093132844918886482_13_2093132808558407680"><div class="fhead"><span class="ftitle">AI clip</span><span class="fbadge">0.01</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fn2_6.jpg" data-src="assets/video/failures/2093132844918886482_13_2093132808558407680.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="fchips"><span class="fchip bad">Passed as real</span><span class="fchip">X</span><span class="fchip">train</span></div></div><div class="fcard" title="DXr51m1gTid"><div class="fhead"><span class="ftitle">AI clip</span><span class="fbadge">0.08</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fn2_7.jpg" data-src="assets/video/failures/DXr51m1gTid.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="fchips"><span class="fchip bad">Passed as real</span><span class="fchip">Instagram</span><span class="fchip">test</span></div></div><div class="fcard" title="DQ0CoQ9kel5"><div class="fhead"><span class="ftitle">AI clip</span><span class="fbadge">0.39</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fn2_8.jpg" data-src="assets/video/failures/DQ0CoQ9kel5.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="fchips"><span class="fchip bad">Passed as real</span><span class="fchip">Instagram</span><span class="fchip">train</span></div></div><div class="fcard" title="2091123681812516924_13_2091116868664741889"><div class="fhead"><span class="ftitle">AI clip</span><span class="fbadge">0.41</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fn2_9.jpg" data-src="assets/video/failures/2091123681812516924_13_2091116868664741889.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="fchips"><span class="fchip bad">Passed as real</span><span class="fchip">X</span><span class="fchip">train</span></div></div><div class="fcard" title="DVKRmHJAW46"><div class="fhead"><span class="ftitle">AI clip</span><span class="fbadge">0.81</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fn2_10.jpg" data-src="assets/video/failures/DVKRmHJAW46.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="fchips"><span class="fchip bad">Passed as real</span><span class="fchip">Instagram</span><span class="fchip">train</span></div></div><div class="fcard" title="2093108723568816367_13_2093108660721344512"><div class="fhead"><span class="ftitle">AI clip</span><span class="fbadge">0.82</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fn2_11.jpg" data-src="assets/video/failures/2093108723568816367_13_2093108660721344512.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="fchips"><span class="fchip bad">Passed as real</span><span class="fchip">X</span><span class="fchip">train</span></div></div><div class="fcard" title="2092267189898289228_13_2092264350870331392"><div class="fhead"><span class="ftitle">AI clip</span><span class="fbadge">0.95</span></div><video class="tvid" muted loop playsinline preload="none" poster="assets/img/failures/fn2_12.jpg" data-src="assets/video/failures/2092267189898289228_13_2092264350870331392.mp4" style="--ar:0.5611" width="202" height="360"></video><div class="fchips"><span class="fchip bad">Passed as real</span><span class="fchip">X</span><span class="fchip">train</span></div></div></div></div></div>
+  <p class="caption">
+    <b>SEAM errors on SLOP.</b> Each card shows the ground-truth label, model score, platform and data split.
+  </p>
 </div>
 
 <!-- ============================ EMBEDDINGS ============================ -->
 <div class="container blog main">
-  <h1>Explore the embedding space yourself</h1>
+  <h1 id="embeddings">Explore the embedding space yourself</h1>
   <p class="text">
     Each point is one clip, embedded by the frozen OpenVision ViT-S/16 encoder and projected to two dimensions
     with PCA. Hover a point for details, click a legend entry to hide a group, and switch the coloring above each
@@ -325,18 +429,21 @@
     On SLOP, AI and real clips overlap heavily, so no single linear direction separates them.
   </p>
 </div>
-<div class="container blog large gray">
+
+<div class="container blog large gray" style="padding-top:3vh; padding-bottom:1.5vh;">
   <div class="explorer" data-explorer="aigvd"></div>
   <div class="explorer" data-explorer="slop"></div>
-  <p class="caption"><b>Embedding space.</b> 100 clips per group, except 40 for HunyuanVideo and AccVideo and 80 for
-    each commercial generator (Sora, Gen2, Pika).</p>
+  <p class="caption">
+    <b>Embedding space.</b> 100 clips per group, except 40 for HunyuanVideo and AccVideo and 80 for each
+    commercial generator (Sora, Gen2, Pika).
+  </p>
 </div>
 
 <!-- ============================ CITATION ============================ -->
 <div class="container blog main">
   <h2>Citation</h2>
   <br>
-<p class="text fnote">Citation coming soon.</p>
+  <p class="text fnote">Citation coming soon.</p>
 </div>
 
 <div class="container blog main">
@@ -350,7 +457,7 @@
 <footer>
   <div class="container">
     <p style="font-size:small;">
-      Last updated October 2026. This website is built on the modified <a href="https://shikun.io/projects/clarity" style="font-size:small;">Clarity Template</a>.
+      Last updated November 2026. This website is built on the modified <a href="https://shikun.io/projects/clarity" style="font-size:small;">Clarity Template</a>.
     </p>
   </div>
 </footer>
